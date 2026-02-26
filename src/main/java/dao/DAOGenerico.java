@@ -5,70 +5,76 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
-import java.sql.Statement; // NOVO IMPORT
+import java.sql.Statement;
 
-/**
- *
- * @author gabri
- */
 public class DAOGenerico {
     
     public static Connection getConexao() throws SQLException, ClassNotFoundException {
-        // A senha deve ser TEMP123 (ou a correta, se já tiver redefinido no MySQL)
-        String USUARIO = "root";
-        String SENHA = "TEMP123"; 
-        String URL_BANCO = "jdbc:mysql://localhost:3306/oraculo_das_quests";
+        // Nome do arquivo do banco que ficará na pasta do seu jogo
+        String URL_BANCO = "jdbc:sqlite:oraculo_das_quests.db";
         
-        // Faz com que a classe seja carregada pela JVM
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        // Carrega o Driver do SQLite
+        Class.forName("org.sqlite.JDBC");
 
-        return DriverManager.getConnection(URL_BANCO, USUARIO, SENHA);
+        return DriverManager.getConnection(URL_BANCO);
     }
     
-    /**
-     * Executa comandos SQL (INSERT, UPDATE, DELETE) e retorna o ID gerado
-     * para INSERTs com AUTO_INCREMENT, ou o número de linhas afetadas.
-     * * @param query O comando SQL
-     * @param params Os parâmetros do comando
-     * @return O ID gerado (para INSERTs) ou o número de linhas afetadas.
-     */
+    public static void inicializarBanco() {
+    try (Connection conn = getConexao(); Statement stmt = conn.createStatement()) {
+        
+        // 1. Tabela de usuários (com S no final!)
+        stmt.execute("CREATE TABLE IF NOT EXISTS usuarios (" +
+                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                     "nome TEXT, senha TEXT);");
+        
+        // 2. Tabela de campanhas (com S e usuario_id)
+        stmt.execute("CREATE TABLE IF NOT EXISTS campanhas (" +
+                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                     "nome TEXT, usuario_id INTEGER, " +
+                     "FOREIGN KEY(usuario_id) REFERENCES usuarios(id));");
+                     
+        // 3. Tabela de missoes (com S e todos os campos do seu DAO)
+        stmt.execute("CREATE TABLE IF NOT EXISTS missoes (" +
+                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                     "titulo TEXT, descricao TEXT, dificuldade TEXT, " +
+                     "recompensa TEXT, origem TEXT, status TEXT, " +
+                     "campanha_id INTEGER, " +
+                     "FOREIGN KEY(campanha_id) REFERENCES campanhas(id));");
+        
+        stmt.execute("""
+CREATE TABLE IF NOT EXISTS modelo (
+    codigo INTEGER PRIMARY KEY AUTOINCREMENT,
+    descricao TEXT
+);
+""");
+
+
+        System.out.println("SQLite: Banco resetado e sincronizado!");
+    } catch (Exception e) {
+        System.err.println("Erro ao inicializar SQLite: " + e.getMessage());
+    }
+}
     public static int executarComando(String query, Object... params) throws SQLException, ClassNotFoundException {
-        // 1. Abre a conexão e prepara o comando solicitando as chaves geradas
-        PreparedStatement sql = getConexao().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        
-        // 2. Define os parâmetros
-        for (int i = 0; i < params.length; i++) {
-            sql.setObject(i + 1, params[i]);
+        try (PreparedStatement sql = getConexao().prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            for (int i = 0; i < params.length; i++) {
+                sql.setObject(i + 1, params[i]);
+            }
+            
+            int result = sql.executeUpdate();
+            try (ResultSet rs = sql.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+            return result;
         }
-        
-        // 3. Executa o comando e obtém o número de linhas afetadas
-        int result = sql.executeUpdate();
-        
-        // 4. Tenta recuperar o ID gerado (se for um INSERT)
-        ResultSet rs = sql.getGeneratedKeys();
-        
-        if (rs.next()) {
-            int idGerado = rs.getInt(1);
-            rs.close();
-            sql.close();
-            return idGerado; // Retorna o ID gerado (o que o ModeloDAOJDBC espera)
-        }
-        
-        // 5. Fecha e retorna o resultado (para UPDATEs ou DELETEs)
-        sql.close();
-        return result;
     }
     
     public static ResultSet executarConsulta(String query, Object... params) throws SQLException, ClassNotFoundException {
-        // NOTA: Para consultas, o PreparedStatement não é fechado aqui 
-        // porque o ResultSet retornado ainda está ativo e precisa da conexão.
-        // O fechamento deve ser feito nos métodos listar() dos DAOs.
         PreparedStatement sql = getConexao().prepareStatement(query);
-        
         for (int i = 0; i < params.length; i++) {
             sql.setObject(i + 1, params[i]);
         }
         return sql.executeQuery();
     }
-    
 }

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>O Oráculo das Quests - Forjar Missão</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&amp;family=Inter:wght@300;400;600&amp;family=MedievalSharp&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#c6a75e", // Aged Gold
+              "background-light": "#f4f1ea",
+              "background-dark": "#0b0f14",
+              "stone": "#2a2d34",
+              "blood": "#8b0000",
+            },
+            fontFamily: {
+              display: ["Cinzel", "serif"],
+              body: ["Inter", "sans-serif"],
+              fantasy: ["MedievalSharp", "cursive"],
+            },
+            borderRadius: {
+              DEFAULT: "4px",
+            },
+          },
+        },
+      };
+    </script>
+<style>.stone-panel {
+    background: radial-gradient(circle at center, #1e2128 0%, #0b0f14 100%);
+    border: 2px solid #c6a75e;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(198, 167, 94, 0.2);
+    position: relative
+    }
+.stone-panel::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border: 1px solid rgba(198, 167, 94, 0.3);
+    pointer-events: none
+    }
+.parchment-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDUwdWhzwR3jEsnZKOdiMPDC6Oex31gL9pEGLel6VTD3zgqLqR3o1Eyn4yGnwcWLTay5dUzTRenvihzm-MVhAxmoMyBL1qNtZDTcHv8zbpbjiaP_wu_t6T6p2mTQMVivm-P8kFiwCdvwoRdIs6mHvVcBLwK7JElEtx1sUwYIr5X2H7Otjt8DW8D_Txp7zPlo84Z2hTlJ01KCH_mLHH0wF3ot6cAsdJyIpsTODgQgYGR0bozpgoFIgn1vMeIBe5EJlL7NBgEEAd8F-M);
+    opacity: 0.4
+    }
+.input-field {
+    background: #111418;
+    border: 1px solid #3d3d3d;
+    border-radius: 6px;
+    transition: all 0.25s ease;
+}
+
+.input-field:focus {
+    border-color: #c6a75e;
+    box-shadow: 0 0 0 2px rgba(198, 167, 94, 0.15);
+    outline: none;
+}
+
+.glow-red {
+    background: linear-gradient(135deg, #8b0000 0%, #4a0000 100%);
+    border: 2px solid #c6a75e;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+    box-shadow: 0 0 20px rgba(139, 0, 0, 0.4);
+    transition: all 0.3s ease
+    }
+.glow-red:hover {
+    transform: translatey(-2px);
+    box-shadow: 0 5px 25px rgba(139, 0, 0, 0.6), 0 0 15px rgba(198, 167, 94, 0.4);
+    filter: brightness(1.2)
+    }
+.corner-ornament {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    border-color: #c6a75e
+    }
+.corner-tl {
+    top: -2px;
+    left: -2px;
+    border-top: 4px solid;
+    border-left: 4px solid
+    }
+.corner-tr {
+    top: -2px;
+    right: -2px;
+    border-top: 4px solid;
+    border-right: 4px solid
+    }
+.corner-bl {
+    bottom: -2px;
+    left: -2px;
+    border-bottom: 4px solid;
+    border-left: 4px solid
+    }
+.corner-br {
+    bottom: -2px;
+    right: -2px;
+    border-bottom: 4px solid;
+    border-right: 4px solid
+    }select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23c6a75e'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.5em
+    }</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center p-4 selection:bg-primary selection:text-black">
+<div class="fixed inset-0 parchment-texture pointer-events-none"></div>
+<div class="relative w-full max-w-4xl">
+<main class="stone-panel p-8 md:p-12 overflow-hidden">
+<div class="corner-ornament corner-tl"></div>
+<div class="corner-ornament corner-tr"></div>
+<div class="corner-ornament corner-bl"></div>
+<div class="corner-ornament corner-br"></div>
+<header class="text-center mb-12 space-y-2">
+<div class="flex items-center justify-center gap-4 mb-2">
+<div class="h-px w-16 bg-gradient-to-r from-transparent to-primary"></div>
+<span class="text-primary font-display tracking-[0.3em] text-xs uppercase">O Oráculo das Quests</span>
+<div class="h-px w-16 bg-gradient-to-l from-transparent to-primary"></div>
+</div>
+<h1 class="font-display text-4xl md:text-5xl text-primary font-black uppercase tracking-widest drop-shadow-lg">
+                    Forjar Nova Missão
+                </h1>
+<p class="text-gray-400 font-body italic text-sm">Insira as crônicas do destino para os aventureiros</p>
+</header>
+<form action="#" class="space-y-8 relative z-10" method="POST">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-6">
+<div class="flex flex-col gap-2">
+    <label for="titulo"
+        class="font-body text-primary text-sm uppercase tracking-wider">
+        Título da Missão
+    </label>
+
+    <input
+        id="titulo"
+        name="titulo"
+        type="text"
+        placeholder="ex: O Sussurro do Rei Lich..."
+        class="input-field w-full px-6 py-4 text-xl text-gray-200 font-body placeholder-gray-600 focus:ring-0 resize-none"
+    />
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-display text-primary text-sm uppercase tracking-wider flex items-center gap-2" for="dificuldade">
+                                Dificuldade da Missão
+                            </label>
+<select class="input-field w-full px-4 py-3 text-gray-200 font-body focus:ring-0 cursor-pointer" id="dificuldade" name="dificuldade">
+<option selected="" value="facil">Fácil (Escudeiro)</option>
+<option value="medio">Média (Cavaleiro)</option>
+<option value="dificil">Difícil (Mestre de Armas)</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-display text-primary text-sm uppercase tracking-wider flex items-center gap-2" for="recompensa">
+                                Recompensa da Missão
+                            </label>
+<textarea class="input-field w-full px-4 py-3 text-gray-200 font-body placeholder-gray-600 focus:ring-0 resize-none" id="recompensa" name="recompensa" placeholder="ex: 500 Peças de Ouro, 1 Espada de Obsidiana..." rows="3"></textarea>
+</div>
+    
+    <div class="flex flex-col gap-2">
+    <label class="font-display text-primary text-sm uppercase tracking-wider">
+        Origem da Missão
+    </label>
+
+    <select
+        id="origem"
+        name="origem"
+        class="input-field w-full px-6 py-4 text-gray-200 font-body focus:ring-0 cursor-pointer"
+    >
+        <option value="REAL">Realeza</option>
+        <option value="GUILDA">Guilda</option>
+        <option value="POPULAR">Povo</option>
+        <option value="IGREJA">Igreja</option>
+        <option value="SOMBRIO">Sombrio</option>
+    </select>
+</div>
+</div>
+<div class="flex flex-col gap-2 h-full">
+<label class="font-display text-primary text-sm uppercase tracking-wider flex items-center gap-2" for="descricao">
+                            Descrição da Missão
+                        </label>
+<textarea class="input-field w-full h-full min-h-[200px] px-4 py-3 text-gray-200 font-body placeholder-gray-600 focus:ring-0 resize-none leading-relaxed" id="descricao" name="descricao" placeholder="Descreva os perigos e o contexto desta jornada..."></textarea>
+</div>
+</div>
+<div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-stone/50">
+<button class="order-2 md:order-1 flex items-center gap-2 text-gray-400 hover:text-primary transition-colors font-display text-sm uppercase tracking-widest" type="button" onclick="javaApp.voltarHub()">
+                        Retornar ao Salão
+                    </button>
+<button class="order-1 md:order-2 glow-red px-10 py-4 font-display text-lg text-white font-bold uppercase tracking-[0.2em] flex items-center gap-3" type="submit">
+                        Publicar Missão
+                    </button>
+</div>
+</form>
+</main>
+<div class="mt-8 text-center">
+<p class="text-stone font-display text-xs tracking-widest opacity-40">ORÁCULO das Quests</p>
+</div>
+</div>
+<div class="fixed top-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="fixed bottom-0 right-0 w-96 h-96 bg-blood/5 rounded-full blur-[150px] pointer-events-none"></div>
+
+<script>
+document.querySelector("form").addEventListener("submit", function(e) {
+    e.preventDefault(); // impede o envio tradicional
+
+    if (typeof javaApp === "undefined") {
+        alert("Conexão com o Oráculo não foi estabelecida.");
+        return;
+    }
+
+    let titulo = document.getElementById("titulo").value.trim();
+    let descricao = document.getElementById("descricao").value.trim();
+    let dificuldade = document.getElementById("dificuldade").value;
+    let recompensa = document.getElementById("recompensa").value.trim();
+    let origem = document.getElementById("origem").value;
+
+    if (!titulo || !descricao) {
+        alert("Título e descrição são obrigatórios.");
+        return;
+    }
+
+    // 🔥 CHAMADA CORRETA (com origem)
+    javaApp.inserirMissao(
+        titulo,
+        descricao,
+        dificuldade,
+        recompensa,
+        origem
+    );
+
+    alert("Missão publicada com sucesso!");
+
+    // opcional: limpar formulário
+    document.querySelector("form").reset();
+});
+</script>
+
+
+
+</body></html>

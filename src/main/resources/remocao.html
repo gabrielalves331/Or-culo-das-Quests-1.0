@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Remoção de Missões - O Oráculo</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&amp;family=MedievalSharp&amp;family=Spectral:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#7a1f1f", // Dark Red
+                        gold: "#c6a75e",
+                        stone: "#2c2f36",
+                        "background-light": "#f4f4f5",
+                        "background-dark": "#0b0f14",
+                    },
+                    fontFamily: {
+                        display: ["Cinzel", "serif"],
+                        gothic: ["MedievalSharp", "cursive"],
+                        body: ["Spectral", "serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "4px",
+                    },
+                    backgroundImage: {
+                        'stone-texture': "url('https://www.transparenttextures.com/patterns/cracked-mud.png')",
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        .gothic-border {
+            border: 2px solid #c6a75e;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        .gothic-border::before, .gothic-border::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #c6a75e;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+        }
+        .gothic-border::before { top: -12px; left: 50%; transform: translateX(-50%); }
+        .gothic-border::after { bottom: -12px; left: 50%; transform: translateX(-50%) rotate(180deg); }
+        .mission-row:hover {
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.2);
+        }.custom-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 1px solid #c6a75e;
+            background: #1a1c20;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .custom-checkbox:checked {
+            background: #7a1f1f;
+            border-color: #7a1f1f;
+            box-shadow: 0 0 10px #7a1f1f;
+        }
+        .custom-checkbox:checked::after {
+            content: '✖';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 14px;
+            text-shadow: 0 0 5px rgba(0,0,0,1);
+        }
+        .smoke-effect {
+            transition: filter 0.5s ease;
+        }
+        .mission-row:hover .smoke-effect {
+            filter: blur(1px) opacity(0.8);
+        }
+        .red-glow {
+            text-shadow: 0 0 15px #7a1f1f, 0 0 30px #7a1f1f;
+        }
+        .btn-menacing {
+            background: linear-gradient(135deg, #4b0d0d 0%, #7a1f1f 100%);
+            box-shadow: 0 0 15px rgba(122, 31, 31, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-menacing:hover {
+            box-shadow: 0 0 25px rgba(122, 31, 31, 0.8);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-stone-900 dark:text-stone-100 min-h-screen flex items-center justify-center font-body bg-stone-texture selection:bg-primary selection:text-white">
+<main class="w-full max-w-4xl p-8 relative">
+<header class="text-center mb-12">
+<h1 class="font-display text-5xl font-bold tracking-widest text-primary red-glow uppercase mb-2">
+                Expurgar Missões
+            </h1>
+<p class="font-gothic text-gold/80 italic text-lg">O Oráculo das Quests</p>
+</header>
+<div class="bg-stone dark:bg-stone-900 gothic-border p-1 rounded shadow-2xl">
+<div class="border border-gold/30 p-6 bg-stone-texture bg-opacity-10">
+<div class="flex items-center justify-between border-b border-gold/20 pb-4 mb-4">
+<span class="font-display text-gold uppercase tracking-wider text-sm">Lista de Compromissos Malditos</span>
+<span class="text-gold/40 text-xs italic">Selecione para banir</span>
+</div>
+
+    <div id="mural"
+     class="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+</div>
+
+    
+<footer class="mt-12 flex flex-col md:flex-row items-center justify-center gap-6">
+<button onclick="removerSelecionadas()"
+class="btn-menacing text-white font-display px-10 py-4 text-lg rounded border border-primary/50 group flex items-center space-x-3">
+<span class="tracking-widest uppercase">Excluir Selecionadas</span>
+</button>
+
+<button class="bg-gold/10 hover:bg-gold/20 border-2 border-gold/40 text-gold font-display px-8 py-3 rounded tracking-widest uppercase transition-all duration-300 flex items-center space-x-2" type="button" onclick="javaApp.voltarHub()">
+<span>Voltar</span>
+</button>
+</footer>
+<div class="absolute -top-10 -left-10 w-40 h-40 bg-primary/5 blur-[100px] pointer-events-none"></div>
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-gold/5 blur-[100px] pointer-events-none"></div>
+</main>
+<style>.custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1a1c20;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c6a75e;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #7a1f1f;
+        }
+    </style>
+    
+    <script>
+   function carregarMissoes(lista) {
+
+    let mural = document.getElementById("mural");
+    mural.innerHTML = "";
+
+    lista.forEach(m => {
+        mural.innerHTML += `
+        <label class="mission-row group flex items-center justify-between p-4 cursor-pointer transition-all duration-300 border border-transparent hover:border-gold/30 rounded">
+
+            <div class="flex items-center space-x-4">
+                <input class="custom-checkbox"
+                       type="checkbox"
+                       name="mission"
+                       value="${m.id}">
+
+                <div>
+                    <h3 class="font-display text-xl text-stone-100 group-hover:text-gold transition-colors">
+                        ${m.titulo}
+                    </h3>
+                    <p class="text-sm text-stone-400 font-gothic italic">
+                        ${m.descricao}
+                    </p>
+                </div>
+            </div>
+
+        </label>
+        `;
+    });
+}
+
+</script>
+
+<script>
+    function removerSelecionadas() {
+
+    let selecionadas = document.querySelectorAll("input[name='mission']:checked");
+
+    if (selecionadas.length === 0) {
+        alert("Selecione pelo menos uma missão.");
+        return;
+    }
+
+    let ids = [];
+    selecionadas.forEach(cb => ids.push(cb.value));
+
+    window.javaApp.removerMissoes(ids.join(","));
+}
+</script>
+
+
+
+
+</body></html>

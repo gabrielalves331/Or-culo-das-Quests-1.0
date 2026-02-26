@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Oráculo das Quests - Fundar Novo Reino</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+<script>
+tailwind.config = {
+    darkMode: "class",
+    theme: {
+        extend: {
+            colors: {
+                primary: "#c6a65d",
+                background: "#1a110a",
+                panel: "#161512",
+                action: "#2c3e50"
+            },
+            fontFamily: {
+                display: ["Newsreader", "serif"]
+            }
+        }
+    }
+}
+</script>
+
+<style>
+body {
+    font-family: 'Newsreader', serif;
+    background: radial-gradient(circle, #1a110a 0%, #2b0a0a 100%);
+}
+.ancient-border {
+    border: 10px solid #2b1d12;
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+}
+.glow-text {
+    text-shadow: 0 0 12px rgba(198, 166, 93, 0.6);
+}
+</style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-6">
+
+<main class="relative w-full max-w-3xl ancient-border bg-panel rounded-lg p-12 flex flex-col items-center text-center">
+
+    <!-- Título -->
+    <header class="space-y-6 mb-10">
+        <h1 class="text-5xl font-bold text-primary glow-text italic tracking-tight">
+            Fundar Novo Reino
+        </h1>
+
+        <p class="text-lg text-primary/70 italic">
+            Toda lenda precisa de um mundo para existir.
+            Nomeie sua campanha e permita que o Oráculo registre sua criação.
+        </p>
+    </header>
+
+    <!-- FORM -->
+    <form onsubmit="criar(event)" class="w-full max-w-lg space-y-8">
+
+        <div class="text-left space-y-3">
+            <label class="block text-primary/60 uppercase text-xs tracking-widest font-bold">
+                Nome da Campanha
+            </label>
+
+            <div class="relative">
+                <input id="nome"
+                       type="text"
+                       placeholder="Ex: Eclipse do Rei Lich"
+                       class="w-full bg-black/40 border border-primary/40 rounded-lg py-5 px-6 text-white placeholder:text-white/20 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-xl">
+
+            </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="space-y-6 pt-4">
+
+            <button type="submit"
+                    class="w-full bg-action border border-primary/40 text-primary rounded-lg py-5 flex items-center justify-center gap-4 uppercase font-bold tracking-widest hover:scale-[1.02] active:scale-[0.98] transition">
+                <span class="material-symbols-outlined text-3xl">✨</span>
+                Erguer Reino
+            </button>
+
+            <button type="button"
+                    onclick="javaApp.voltar()"
+                    class="text-primary/50 hover:text-primary text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-2 mx-auto">
+                <span class="material-symbols-outlined text-lg">&#10094;</span>
+                Retornar
+            </button>
+
+        </div>
+
+    </form>
+
+</main>
+
+<script>
+function criar(event) {
+    event.preventDefault();
+
+    const nome = document.getElementById("nome").value.trim();
+
+    if (!nome) {
+        alert("O Reino precisa de um nome, Mestre.");
+        return;
+    }
+
+    javaApp.criar(nome);
+}
+</script>
+
+</body>
+</html>

@@ -7,18 +7,23 @@ public class Missao {
     private String descricao;
     private String dificuldade;
     private String recompensa;
-    private boolean concluida;
+    private String origem;
+    private String status;
+    private int campanhaId;
 
     public Missao() {}
 
-    public Missao(int id, String titulo, String descricao, String dificuldade, String recompensa, boolean concluida) {
-        this.id = id;
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.dificuldade = dificuldade;
-        this.recompensa = recompensa;
-        this.concluida = concluida;
-    }
+    public Missao(int id, String titulo, String descricao,
+              String dificuldade, String recompensa,
+              String origem, String status) {
+    this.id = id;
+    this.titulo = titulo;
+    this.descricao = descricao;
+    this.dificuldade = dificuldade;
+    this.recompensa = recompensa;
+    this.origem = origem;
+    this.status = status;
+}
 
     // Getters e Setters
     public int getId() { return id; }
@@ -35,7 +40,14 @@ public class Missao {
 
     public String getRecompensa() { return recompensa; }
     public void setRecompensa(String recompensa) { this.recompensa = recompensa; }
+    
+    public String getOrigem() { return origem; }
+    public void setOrigem(String origem) { this.origem = origem; }
 
-    public boolean isConcluida() { return concluida; }
-    public void setConcluida(boolean concluida) { this.concluida = concluida; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    
+    public int getCampanhaId() { return campanhaId; }
+public void setCampanhaId(int campanhaId) { this.campanhaId = campanhaId; }
+
 }

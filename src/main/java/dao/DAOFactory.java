@@ -1,32 +1,40 @@
 package dao;
 
+import dao.MissaoDAO;
+import dao.MissaoDAOJDBC;
+import dao.ModeloDAO;
+import dao.ModeloDAOJDBC;
+import dao.UsuarioDAO;
+import dao.UsuarioDAOJDBC;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Factory simples para criar DAOs com conexão JDBC.
- */
 public class DAOFactory {
 
-    // Retorna nova Connection. Chame this por cada DAO (ou adapte para pooling).
-    public static Connection getConnection() throws SQLException, ClassNotFoundException {
-        // A senha deve ser TEMP123 (ou a correta, se já tiver redefinido no MySQL)
-        String USUARIO = "root";
-        String SENHA = "TEMP123"; 
-        String URL_BANCO = "jdbc:mysql://localhost:3306/oraculo_das_quests";
-        
-        // Faz com que a classe seja carregada pela JVM
-        Class.forName("com.mysql.cj.jdbc.Driver");
-
-        return DriverManager.getConnection(URL_BANCO, USUARIO, SENHA);
+    public static Connection getConnection() {
+    try {
+        // Agora ele pega a conexão do SQLite que configuramos no DAOGenerico
+        return DAOGenerico.getConexao();
+    } catch (SQLException | ClassNotFoundException e) {
+        throw new RuntimeException("Erro ao conectar ao SQLite através do Factory", e);
     }
+}
 
-    public static MissaoDAO criarMissaoDAO() throws SQLException, ClassNotFoundException {
+    public static MissaoDAO criarMissaoDAO() {
         return new MissaoDAOJDBC(getConnection());
     }
 
-    public static ModeloDAO criarModeloDAO() throws SQLException, ClassNotFoundException {
+    public static ModeloDAO criarModeloDAO() {
         return new ModeloDAOJDBC(getConnection());
     }
+
+    public static UsuarioDAO criarUsuarioDAO() {
+        return new UsuarioDAOJDBC(getConnection());
+    }
+    
+    public static CampanhaDAO criarCampanhaDAO() {
+    return new CampanhaDAOJDBC(getConnection());
+}
+
 }

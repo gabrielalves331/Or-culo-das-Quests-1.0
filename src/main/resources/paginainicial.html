@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>O Oráculo: Mural da Taverna</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&amp;family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#c6a75e", // Aged Gold
+                        "tavern-dark": "#0b0f14",
+                        "wood-brown": "#3d2b1f",
+                        "parchment": "#d4c5a9",
+                        "iron": "#2c2e33",
+                        "blood-red": "#7a1f1f",
+                    },
+                    fontFamily: {
+                        display: ["Cinzel", "serif"],
+                        body: ["EB Garamond", "serif"],
+                    },
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">:root {
+    --primary-glow: rgba(198, 167, 94, 0.4);
+    --wood-texture: url(https://www.transparenttextures.com/patterns/wood-pattern.png);
+    --paper-texture: url(https://www.transparenttextures.com/patterns/pinstriped-suit.png)
+    }
+.tavern-bg {
+    background-color: #0b0f14;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuD6mB1B6cB8B17uu-SuYKRSaXbiVoW29B_aa80D29UbfbDY5M0nAVFET9v7ns1q_ALhsBW5Ok_tCd9a0D_UjRo0tOdmKkW8Ja5nS_pIV_LbEmJBBtUEJogVmVsn48ByPuBzMQObui3-mHiuuqA2GXUS9XuOfa8iL1jK-f-prwXiu5ns2eJ9NTn58Qy7E5VbumW3Mk1YX0WjdBdkrePXItht8e9Z4afb11YKE7EWpNVkCbLKk5z7Jt6958QIEXPm5-r8-kyuu7T7cWo);
+    background-size: cover;
+    background-position: center
+    }
+.wooden-frame {
+    background-color: #2a1b10;
+    background-image: var(--wood-texture);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 100px rgba(0, 0, 0, 0.5);
+    border: 12px solid #1a0f08;
+    border-image: linear-gradient(to bottom, #3d2b1f, #1a0f08) 1
+    }
+.parchment-quest {
+    background-color: #d4c5a9;
+    background-image: var(--paper-texture);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    transform: rotate(var(--tw-rotate));
+    transition: all 0.3s ease
+    }
+.parchment-quest:hover {
+    transform: scale(1.05) rotate(0deg);
+    z-index: 50
+    }
+.wax-seal {
+    width: 24px;
+    height: 24px;
+    background: radial-gradient(circle, #7a1f1f 0%, #4a0f0f 100%);
+    border-radius: 50%;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center
+    }
+.iron-plaque {
+    background: linear-gradient(145deg, #3a3d42, #1e2024);
+    border: 2px solid #4b4f57;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    }
+.iron-plaque:hover {
+    box-shadow: 0 0 30px #7a1f1f;
+    border-color: #c6a75e;
+    transform: translatey(-4px)
+    }
+.candle-light {
+    filter: blur(40px);
+    background: radial-gradient(circle, rgba(255, 165, 0, 0.2) 0%, transparent 70%);
+    animation: flicker 4s infinite alternate
+    }
+@keyframes flicker {
+    0% {
+        opacity: 0.5;
+        transform: scale(1);
+        } 50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+        } 100% {
+        opacity: 0.6;
+        transform: scale(0.95);
+        }
+    }
+.mystical-glow {
+    text-shadow: 0 0 10px var(--primary-glow)
+    }</style>
+</head>
+<body class="tavern-bg text-slate-200 min-h-screen flex items-center justify-center overflow-x-hidden selection:bg-blood-red selection:text-white">
+<div class="fixed top-1/4 left-1/4 w-64 h-64 candle-light pointer-events-none"></div>
+<div class="fixed bottom-1/4 right-1/4 w-80 h-80 candle-light pointer-events-none"></div>
+<main class="relative z-10 w-full max-w-6xl px-4 py-8 flex items-center justify-center">
+<div class="absolute -left-12 top-20 hidden xl:block">
+<div class="parchment-quest w-48 h-64 p-4 text-slate-800 -rotate-3 relative">
+<div class="wax-seal absolute -top-2 left-1/2 -translate-x-1/2"></div>
+<div class="font-display text-xs border-b border-black/20 pb-1 mb-2">PROCURA-SE</div>
+<div class="font-body text-sm leading-tight italic">Relatos de uma Ilha misteriosa ao Sul...</div>
+</div>
+</div>
+<div class="absolute -right-8 bottom-40 hidden xl:block">
+<div class="parchment-quest w-44 h-56 p-4 text-slate-800 rotate-6 relative">
+<div class="wax-seal absolute top-2 right-2"></div>
+<div class="font-display text-xs border-b border-black/20 pb-1 mb-2">RECOMPENSA</div>
+<div class="font-body text-sm leading-tight italic">100 Moedas de Ouro pela cabeça do Borges.</div>
+</div>
+</div>
+<div class="wooden-frame w-full max-w-4xl p-1 md:p-3 relative overflow-hidden">
+<div class="bg-[#1e140d] p-8 md:p-16 border-4 border-[#120a06] text-center flex flex-col items-center relative">
+<div class="absolute top-4 left-4 text-slate-600">
+</div>
+<header class="mb-10">
+<h1 class="font-display text-4xl md:text-6xl text-primary mystical-glow tracking-wider uppercase mb-6 leading-tight">
+                        Bem-vindo(a),<br class="hidden md:block"/> Aventureiro(a)!
+                    </h1>
+
+</header>
+<section class="mb-14 max-w-2xl">
+<p class="font-body text-xl md:text-2xl italic leading-relaxed text-slate-400">
+                        Chegaste ao <span class="text-primary font-bold">Oráculo das Quests</span>.
+                    </p>
+<p class="font-body text-xl md:text-2xl leading-relaxed mt-4 text-slate-300">
+                        Esta é a sua ferramenta de <span class="text-primary/80">Tavern Quest Board</span>, o centro das missões do Seu Rpg.
+                    </p>
+</section>
+<div class="relative group flex flex-col items-center gap-6">
+
+    <button id="btnIniciar"
+        class="iron-plaque px-12 py-6 rounded flex items-center justify-center gap-4">
+        <span class="font-display text-xl md:text-2xl text-primary font-bold tracking-[0.2em] uppercase">
+            Que as lendas comecem!
+        </span>
+    </button>
+
+    <button id="btnSair"
+class="mt-6 px-8 py-3 text-amber-500/60 font-display hover:text-amber-500 transition-colors uppercase tracking-widest text-sm">
+    Sair
+</button>
+
+
+</div>
+
+</div>
+<div class="absolute -bottom-10 -left-10 md:block hidden">
+<div class="parchment-quest w-32 h-40 p-3 text-slate-900 -rotate-12 border border-black/10 scale-75 opacity-80">
+<div class="wax-seal absolute top-1 left-1 w-4 h-4"></div>
+<div class="font-display text-[8px] mb-1">AVISO</div>
+<div class="font-body text-[10px] leading-tight">Cuidado com as sombras na adega.</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="fixed bottom-8 left-0 w-full text-center opacity-30 font-body text-sm tracking-[0.3em] uppercase pointer-events-none">
+        © Sistema de RPG Oráculo das Quests
+        
+    </footer>
+<button class="fixed top-6 right-6 p-4 text-primary hover:text-white transition-colors z-50 group" onclick="document.documentElement.classList.toggle('dark')">
+</button>
+
+<script>
+window.addEventListener("load", function () {
+    const btn = document.getElementById("btnSair");
+
+    btn.onclick = function () {
+        if (window.javaApp) {
+            javaApp.sair();
+        } else {
+            console.log("javaApp não encontrado");
+            alert("Erro de conexão com Java.");
+        }
+    };
+});
+</script>
+
+<script>
+window.addEventListener("load", function () {
+    const btn = document.getElementById("btnIniciar");
+
+    btn.onclick = function () {
+        if (window.javaApp) {
+            javaApp.irParaLogin();
+        } else {
+            console.log("javaApp não encontrado");
+            alert("Erro de conexão com Java.");
+        }
+    };
+});
+</script>
+
+
+
+
+</body>
+</html>
+

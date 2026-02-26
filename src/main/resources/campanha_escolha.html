@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selecionar Campanha</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@300;400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+<script>
+tailwind.config = {
+    darkMode: "class",
+    theme: {
+        extend: {
+            colors: {
+                primary: "#c6a65d",
+                background: "#0a0907"
+            },
+            fontFamily: {
+                display: ["Newsreader", "serif"]
+            }
+        }
+    }
+}
+</script>
+
+<style>
+    .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.nav-titulo {
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: #d4af37;
+    font-family: "Cinzel", serif;
+}
+
+.nav-btn {
+    background: transparent;
+    border: 1px solid #d4af37;
+    color: #d4af37;
+    font-size: 28px;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: #d4af37;
+    color: #1a0f05;
+    box-shadow: 0 0 15px rgba(212,175,55,0.6);
+}
+
+    
+body {
+    font-family: "Newsreader", serif;
+    background: radial-gradient(circle at center, #1a110a 0%, #0a0907 100%);
+}
+.scroll-card {
+    transition: all 0.4s ease;
+}
+.active {
+    transform: scale(1.15);
+    box-shadow: 0 0 40px rgba(198,166,93,0.4);
+}
+.campanha-card {
+    width: 260px;
+    height: 380px;
+    background: #8c7a63;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.campanha-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4);
+}
+
+.campanha-card.ativa {
+    background: #d4c2a1;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+    border: 1px solid #d4af37;
+}
+
+.nav-lateral {
+    background: transparent;
+    border: 1px solid #c6a65d;
+    color: #c6a65d;
+    font-size: 28px;
+    width: 50px;
+    height: 80px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-lateral:hover {
+    background: #c6a65d;
+    color: #0a0907;
+    box-shadow: 0 0 20px rgba(198,166,93,0.6);
+    transform: scale(1.1);
+}
+
+.titulo-campanha {
+    font-family: "Newsreader", serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #1a1208;
+}
+
+.subtitulo-campanha {
+    font-size: 12px;
+    letter-spacing: 2px;
+    opacity: 0.6;
+}
+
+
+
+body {
+    background: radial-gradient(circle at center, #1a0f05 0%, #0d0702 100%);
+}
+
+</style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-center text-white p-6">
+    
+
+<h1 class="text-4xl font-bold text-primary mb-12 tracking-widest uppercase">
+    Escolha sua Jornada
+</h1>
+    
+    
+<div class="flex items-center justify-center gap-8 mt-6">
+
+    <!-- Botão Esquerda -->
+    <button onclick="anterior()"
+        class="nav-lateral">
+        &#10094;
+    </button>
+
+    <!-- Carrossel -->
+    <div id="carrossel"
+        class="flex items-center justify-center gap-12 transition-all duration-500">
+    </div>
+
+    <!-- Botão Direita -->
+    <button onclick="proximo()"
+        class="nav-lateral">
+        &#10095;
+    </button>
+
+</div>
+
+
+
+<!-- BOTÕES -->
+<div class="mt-16 flex gap-6 flex-wrap justify-center">
+
+    <button onclick="javaApp.criarNova()"
+        class="bg-[#2c3338] border border-primary/40 text-primary px-8 py-3 rounded uppercase tracking-widest">
+        Criar Nova
+    </button>
+
+    <button onclick="entrar()"
+        class="bg-[#2c3338] border border-primary/40 text-primary px-8 py-3 rounded uppercase tracking-widest">
+        Entrar
+    </button>
+
+    <button onclick="excluir()"
+        class="bg-[#2c3338] border border-red-700 text-red-400 px-8 py-3 rounded uppercase tracking-widest">
+        Excluir
+    </button>
+
+    <button onclick="javaApp.voltarlogin()"
+        class="bg-[#2c3338] border border-primary/40 text-primary px-8 py-3 rounded uppercase tracking-widest">
+        Voltar
+    </button>
+
+</div>
+
+<script>
+let campanhas = [];
+let indexAtual = 0;
+
+function render() {
+    const container = document.getElementById("carrossel");
+    container.innerHTML = "";
+
+    campanhas.forEach((c, index) => {
+
+        const card = document.createElement("div");
+        card.className = "scroll-card w-56 h-80 bg-[#d9c5a3] text-black rounded p-6 flex flex-col justify-between text-center";
+
+        if (index === indexAtual) {
+            card.classList.add("active");
+        } else {
+            card.style.opacity = "0.5";
+            card.style.transform = "scale(0.9)";
+        }
+
+        card.innerHTML = `
+            <div>
+                <h3 class="titulo-campanha">${c.nome}</h3>
+
+            </div>
+            <div class="subtitulo-campanha">
+            Arquivo Arcano #${c.id}
+            </div>
+
+        `;
+
+        card.onclick = () => {
+            indexAtual = index;
+            render();
+        };
+
+        container.appendChild(card);
+    });
+}
+
+function anterior() {
+    if (campanhas.length === 0) return;
+    indexAtual = (indexAtual - 1 + campanhas.length) % campanhas.length;
+    render();
+}
+
+function proximo() {
+    if (campanhas.length === 0) return;
+    indexAtual = (indexAtual + 1) % campanhas.length;
+    render();
+}
+
+function entrar() {
+    if (campanhas.length === 0) return;
+    const selecionada = campanhas[indexAtual];
+    javaApp.selecionarCampanha(selecionada.id);
+}
+
+function excluir() {
+    if (campanhas.length === 0) return;
+    const selecionada = campanhas[indexAtual];
+
+    if (!confirm("Deseja excluir esta campanha?")) return;
+
+    javaApp.excluirCampanha(selecionada.id);
+}
+
+function carregarCampanhas(lista) {
+    campanhas = lista;
+
+    if (!campanhas || campanhas.length === 0) {
+        document.getElementById("carrossel").innerHTML =
+            "<p class='text-primary/60'>Nenhuma campanha encontrada.</p>";
+        return;
+    }
+
+    render();
+}
+
+</script>
+
+</body>
+</html>

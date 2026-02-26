@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Seleção de Missão - O Oráculo das Quests</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&amp;family=MedievalSharp&amp;family=Spectral:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#d4af37", // Classic Gold
+              "background-light": "#2d1b0d",
+              "background-dark": "#0f0a05",
+              "parchment": "#e4d5b7",
+              "iron": "#3a3a3a",
+            },
+            fontFamily: {
+              display: ["Cinzel", "serif"],
+              body: ["Spectral", "serif"],
+              fantasy: ["MedievalSharp", "cursive"],
+            },
+            borderRadius: {
+              DEFAULT: "4px",
+            },
+          },
+        },
+      };
+    </script>
+<style>body {
+    background-image: radial-gradient(circle at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%), url(https://lh3.googleusercontent.com/aida-public/AB6AXuAH2oHJjV1utBIAlZC7U9gZym8zLgFRy0TJfu-CQ-lENgCBCHg4bM-8jXbxONzIh1U1U84e9wTqQuXz4_UlIy3xdT9gBLj6vtbtcLeeg347m5R6q2lyLunZnLqpBhslow_0iKwQnJXCgwfVycRblr0bmcefbn1kt5JQoveXloag7fKGCMixg0ylrg6f9Wq5dQgispSKHeE7WoPas6g45GVAvXoRFCujNOcUrcNKBDrsDh2HUFXSjScPNBp8XNmuyCLsXwVvZ1BeQ8w);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh
+    }
+.parchment-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBSHF2o7N_0P7gzDr_pVYSbX9WJwlbXoutXWpwc279-xC2su730GurpFtcXSzoCEJbBmy2gbJHEWEuU2uNjeXlkzZav8cQaI2LaPL4AldflrZzYOS90zcv6WegFv00ASd3Lp14DYRUIJqY24hLkilIBj4fPmor46P8VaqBc2M1d3YSK0QzO7tUH6Jxr-hd5JF4XiQXPhVkIJ6UrhEsDTn8Pgtxwn-t2ZJc__rPXo5a8_Ahk5u4-tkwocZZ9J-PTrpS2IH7DZLH7FJ0);
+    box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(139, 69, 19, 0.1);
+    position: relative
+    }
+.parchment-texture::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    pointer-events: none
+    }
+.wax-seal {
+    background: radial-gradient(circle at 30% 30%, #a52a2a, #4a0404);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #5a0a0a
+    }
+.iron-button {
+    background: linear-gradient(135deg, #444, #222);
+    border: 3px solid #111;
+    box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.1), 0 10px 20px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden
+    }
+.iron-button:hover {
+    filter: brightness(1.2);
+    transform: translatey(-2px);
+    box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.1), 0 15px 30px rgba(0, 0, 0, 0.8)
+    }
+.iron-button:active {
+    transform: translatey(1px)
+    }
+.mission-card {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    cursor: pointer
+    }
+.mission-card:hover {
+    transform: scale(1.05) rotate(0deg) !important;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+    z-index: 50
+    }
+.mission-radio:checked + .mission-card {
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.7);
+    border: 2px solid #d4af37;
+    transform: scale(1.03) rotate(0deg) !important
+    }
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px
+    }
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3)
+    }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4a3420;
+    border-radius: 4px
+    }</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-amber-50 font-body antialiased selection:bg-primary selection:text-black">
+<div class="max-w-7xl mx-auto px-4 py-12 flex flex-col min-h-screen">
+<header class="text-center mb-16 relative">
+<div class="inline-block">
+<h2 class="text-primary font-display text-lg tracking-[0.3em] uppercase mb-2 drop-shadow-lg">Mural da Taverna</h2>
+<h1 class="text-4xl md:text-6xl font-display font-black text-white drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] px-4">
+                    Selecione a Missão para Atualizar
+                </h1>
+<div class="h-1 w-full bg-gradient-to-r from-transparent via-primary to-transparent mt-4 opacity-50"></div>
+</div>
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary/5 rounded-full blur-[100px] -z-10"></div>
+</header>
+<main class="flex-grow">
+    
+    
+<form id="listaMissoes" action="#" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start px-4" method="POST">
+</form>
+
+</main>
+<footer class="mt-20 flex flex-col md:flex-row items-center justify-center gap-6">
+<button class="order-2 md:order-1 px-8 py-3 text-amber-500/60 font-display hover:text-amber-500 transition-colors uppercase tracking-widest text-sm flex items-center gap-2" type="button" onclick="javaApp.voltarHub()">
+                Voltar para a Taverna
+            </button>
+<button class="order-1 md:order-2 iron-button px-12 py-5 text-2xl font-display font-bold text-white uppercase tracking-[0.2em] flex items-center gap-4" type="button" onclick="editarSelecionada()">
+                Editar Missão
+            </button>
+</footer>
+</div>
+<div class="fixed top-0 left-0 w-32 h-32 opacity-20 pointer-events-none">
+<div class="absolute top-4 left-4 border-t-2 border-l-2 border-primary w-12 h-12"></div>
+</div>
+<div class="fixed bottom-0 right-0 w-32 h-32 opacity-20 pointer-events-none">
+<div class="absolute bottom-4 right-4 border-b-2 border-r-2 border-primary w-12 h-12"></div>
+</div>
+
+    <script>
+document.querySelector("form").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let selecionado = document.querySelector("input[name='mission']:checked");
+
+    if(!selecionado){
+        alert("Escolha uma missão.");
+        return;
+    }
+
+    javaApp.editarMissao(selecionado.value);
+});
+</script>
+
+<script>
+function carregarMissoes(missoes) {
+
+    let form = document.getElementById("listaMissoes");
+    form.innerHTML = "";
+
+    missoes.forEach(m => {
+
+        let label = document.createElement("label");
+        label.className = "relative block group";
+
+        label.innerHTML = `
+            <input class="mission-radio hidden" name="mission" type="radio" value="${m.id}"/>
+
+            <div class="mission-card parchment-texture bg-parchment p-8 text-stone-900 rotate-[-1deg] min-h-[320px] flex flex-col">
+
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 wax-seal"></div>
+
+                <div class="mb-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-stone-600 opacity-70">
+                        ${m.dificuldade}
+                    </span>
+
+                    <h3 class="text-2xl font-fantasy leading-tight mt-1 border-b border-stone-400/30 pb-2">
+                        ${m.titulo}
+                    </h3>
+                </div>
+
+                <div class="space-y-3 flex-grow italic text-stone-800 leading-relaxed">
+                    <p>${m.descricao}</p>
+                </div>
+
+                <div class="mt-6 text-amber-800 font-fantasy text-xl">
+                    ${m.recompensa}
+                </div>
+            </div>
+        `;
+
+        form.appendChild(label);
+    });
+}
+</script>
+
+<script>function editarSelecionada() {
+
+    let selecionado = document.querySelector("input[name='mission']:checked");
+
+    if(!selecionado){
+        alert("Escolha uma missão.");
+        return;
+    }
+
+    javaApp.editarMissao(selecionado.value);
+}
+</script>
+
+
+    
+</body></html>

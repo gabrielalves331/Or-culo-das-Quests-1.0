@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mural de Missões - O Oráculo das Quests</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#c6a65d",
+            "background-light": "#f8f7f6",
+            "background-dark": "#0b0f14",
+            "stone-surface": "#2c2f36",
+            "abyssal-red": "#7a1f1f",
+          },
+          fontFamily: {
+            "display": ["Newsreader", "serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+/* ===== CARTAZ MEDIEVAL AVANÇADO ===== */
+
+.quest-poster {
+    width: 320px;
+    min-height: 380px;
+    padding: 45px 30px;
+    position: relative;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(8px 12px 18px rgba(0, 0, 0, 0.8));
+    cursor: pointer;
+    font-family: "Almendra", serif;
+    background: #e6d3b3;
+}
+
+/* bordas queimadas */
+.quest-poster::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    box-shadow:
+        inset 0 0 30px rgba(60, 30, 10, 0.8),
+        inset 0 0 80px rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+}
+
+/* efeito leve de textura */
+.quest-poster::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+    opacity: 0.25;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
+
+/* variações irregulares */
+.parchment-1 {
+    clip-path: polygon(2% 0%, 98% 1%, 100% 98%, 95% 100%, 5% 99%, 0% 95%);
+}
+
+.parchment-2 {
+    clip-path: polygon(0 2%, 100% 0, 98% 95%, 80% 98%, 20% 100%, 2% 96%);
+}
+
+.parchment-3 {
+    clip-path: polygon(5% 2%, 95% 0, 100% 20%, 98% 80%, 95% 98%, 5% 100%, 0 80%, 2% 20%);
+}
+
+/* ===== PREGOS ===== */
+
+.nail {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: radial-gradient(circle at 30% 30%, #aaa, #444);
+    border-radius: 50%;
+    box-shadow: 
+        0 2px 4px rgba(0,0,0,0.6),
+        inset -2px -2px 3px rgba(0,0,0,0.6),
+        inset 2px 2px 3px rgba(255,255,255,0.3);
+}
+
+/* posições dos pregos */
+.nail.top-left { top: -7px; left: -7px; }
+.nail.top-right { top: -7px; right: -7px; }
+.nail.bottom-left { bottom: -7px; left: -7px; }
+.nail.bottom-right { bottom: -7px; right: -7px; }
+
+/* ===== SELO DE CERA ===== */
+
+.wax-seal {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    background: radial-gradient(circle at 30% 30%, #b22222, #5c0000);
+    border-radius: 50%;
+    box-shadow:
+        inset -3px -3px 6px rgba(0,0,0,.6),
+        3px 3px 6px rgba(0,0,0,.4);
+    border: 2px solid #400000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    color: #ffd9d9;
+}
+    /* ===== VARIAÇÃO POR ORIGEM ===== */
+
+/* 👑 REAL - papel nobre */
+.paper-real {
+    background: #f3e2b3;
+    border: 2px solid #c6a65d;
+    box-shadow:
+        inset 0 0 20px rgba(198,166,93,0.3),
+        0 8px 20px rgba(0,0,0,0.7);
+}
+
+/* 🛡 GUILDA - papel firme e prático */
+.paper-guilda {
+    background: #e4d8c3;
+    border: 2px solid #5a4b3c;
+    filter: contrast(0.95);
+}
+
+/* ⛪ IGREJA - papel claro quase branco */
+.paper-igreja {
+    background: #f5f5f0;
+    border: 2px solid #bdbdbd;
+    box-shadow:
+        inset 0 0 25px rgba(0,0,0,0.2);
+}
+
+/* 🧙 MAGOS - antigo e manchado */
+.paper-magos {
+    background: #d8c8a8;
+    border: 2px solid #4b2e5e;
+    position: relative;
+}
+
+.paper-magos::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 20% 30%, rgba(50,0,80,0.2) 2px, transparent 3px),
+                      radial-gradient(circle at 70% 60%, rgba(0,0,0,0.2) 3px, transparent 4px);
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* 🍺 POPULAR - velho e sujo */
+.paper-popular {
+    background: #c9b89a;
+    border: 2px dashed #5a4632;
+    filter: brightness(0.9) sepia(0.3);
+    box-shadow:
+        inset 0 0 40px rgba(0,0,0,0.6);
+}
+
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-stone-200 min-h-screen flex flex-col items-center justify-center p-4 selection:bg-primary selection:text-black">
+<!-- Main Quest Board Container -->
+<main class="w-full max-w-6xl mx-auto flex flex-col items-center space-y-8 py-12">
+<!-- Header Section -->
+<header class="text-center space-y-2 mb-4">
+  <div class="inline-block relative">
+    <h1 class="text-5xl md:text-7xl font-bold uppercase tracking-[0.2em] text-primary drop-shadow-[0_0_15px_rgba(198,166,93,0.4)] italic">
+      Mural de Missões
+    </h1>
+    <div class="h-px w-full bg-gradient-to-r from-transparent via-primary to-transparent mt-4 opacity-50"></div>
+  </div>
+</header>
+
+<!-- Central Quest Container -->
+<div class="w-full bg-stone-surface/40 backdrop-blur-sm border border-primary/20 rounded-lg p-8 ornate-border shadow-2xl relative overflow-hidden">
+<!-- Atmospheric Background Decor -->
+<div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+<img class="w-full h-full object-cover" data-alt="Subtle dark stone texture background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmyfY5QlslqGJt8_GJ2P_AiqF4Eb3K-BKTiFVDI6di1aEc9_DW9gCf2C3nEkr14yaH5RI35hdHflQUWn0lIyHq3FXZWppsv2EjvtrS-XeZWfa2pNdY89q6eEhrOR0MC0jOXzGb52SMgvItEGRix7n_7xr9H_7gXgvgqkltA-tS73Y_8LUz8i0bc9GnWvvJE92kwkEfpe0RXUaqLD0fQHaDfvayjnmqXa-eSIxBAXDWwx760iKhwohkqZ0l4o4EJYvBtImMIPocnio"/>
+</div>
+<!-- Quest Data Table -->
+<div class="relative overflow-x-auto">
+<div id="mural" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+</div>
+
+</div>
+</div>
+
+<!-- Navigation Footer -->
+<footer class="pt-8 flex justify-center">
+  <div class="w-full max-w-md">
+      
+<button id="btnVoltar"
+onclick="javaApp.voltarHub()"
+class="group w-full max-w-md mx-auto
+py-4
+bg-primary text-background-dark
+font-bold text-lg uppercase
+tracking-widest
+rounded
+flex items-center justify-center
+transition-all duration-300
+hover:bg-white hover:shadow-[0_0_30px_rgba(198,166,93,0.6)]">
+  Voltar ao Oráculo
+</button>
+
+  </div>
+</footer>
+</main>
+<!-- Ambient Effects -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-[-1]">
+<!-- Top-left glow -->
+<div class="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-primary/5 rounded-full blur-[120px]"></div>
+<!-- Bottom-right glow -->
+<div class="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-abyssal-red/5 rounded-full blur-[120px]"></div>
+</div>
+
+<script>
+function carregarMissoes(lista) {
+    const mural = document.getElementById("mural");
+    mural.innerHTML = "";
+
+    const papeis = ["parchment-1", "parchment-2", "parchment-3"];
+
+    lista.forEach((m, index) => {
+
+        const papel = papeis[index % 3];
+        const rotacao = (Math.random() * 6 - 3).toFixed(1);
+
+        let classeOrigem = "";
+let simbolo = "";
+
+switch (m.dificuldade) {
+    case "facil":
+        classeOrigem = "paper-real";
+        simbolo = "📜";
+        break;
+
+    case "medio":
+        classeOrigem = "paper-guilda";
+        simbolo = "⚔️";
+        break;
+
+    case "dificil":
+        classeOrigem = "paper-popular";
+        simbolo = "☠️";
+        break;
+
+    default:
+        classeOrigem = "paper-guilda";
+        simbolo = "📌";
+}
+
+
+
+        mural.innerHTML += `
+    <div class="quest-poster ${papel} ${classeOrigem}"
+
+         style="transform: rotate(${rotacao}deg)">
+
+        <div class="nail top-left"></div>
+        <div class="nail top-right"></div>
+
+        <h2 class="text-2xl mb-4 border-b border-black/30 pb-2 text-red-900 uppercase tracking-wide">
+            ${m.titulo}
+        </h2>
+
+        <div class="space-y-3 text-gray-800 leading-relaxed italic text-sm">
+            <p><strong>Dificuldade:</strong> ${m.dificuldade}</p>
+
+
+            <p>
+                "${m.descricao}"
+            </p>
+
+            <div class="mt-4 font-bold text-amber-900">
+                Dificuldade: ${m.dificuldade}
+            </div>
+
+            <div class="mt-2 font-bold text-emerald-900">
+                Recompensa: ${m.recompensa}
+            </div>
+        </div>
+
+        <div class="wax-seal">
+            ${simbolo}
+        </div>
+    </div>
+`;
+
+    });
+}
+</script>
+
+
+<script>
+window.onload = function() {
+
+    const json = javaApp.buscarMissoes();   // chama o Java
+    const missoes = JSON.parse(json);       // transforma em objeto JS
+    carregarMissoes(missoes);               // joga na tabela
+}
+</script>
+
+
+</body></html>

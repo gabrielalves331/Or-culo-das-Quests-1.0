@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - Oráculo das Quests</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+<script>
+tailwind.config = {
+    darkMode: "class",
+    theme: {
+        extend: {
+            colors: {
+                primary: "#c6a65d",
+                background: "#0d0504"
+            },
+            fontFamily: {
+                display: ["Newsreader", "serif"]
+            }
+        }
+    }
+}
+</script>
+
+<style>
+body {
+    font-family: "Newsreader", serif;
+}
+.arcane-bg {
+    background: radial-gradient(circle at center, #1a0d0a 0%, #0d0504 70%, #000 100%);
+}
+</style>
+</head>
+
+<body class="bg-background text-white min-h-screen flex items-center justify-center arcane-bg p-4">
+
+<div class="w-full max-w-[480px] bg-black/60 border border-primary/20 rounded-xl p-8 shadow-2xl">
+
+    <h1 class="text-primary text-4xl font-extrabold text-center mb-2 tracking-widest">
+        Oráculo das Quests
+    </h1>
+
+    <p class="text-primary/60 text-center italic mb-8">
+        Portal dos Mestres
+    </p>
+
+    <!-- FORM -->
+    <form onsubmit="logar(event)" class="flex flex-col gap-6">
+
+        <!-- EMAIL -->
+        <div>
+            <label class="text-primary/80 text-sm uppercase tracking-widest">
+                Email do Mestre
+            </label>
+            <input id="email"
+                   type="text"
+                   placeholder="Nome de usuário"
+                   class="w-full mt-2 bg-black/70 border border-primary/20 rounded-lg h-12 px-4 text-white focus:outline-none focus:border-primary transition">
+        </div>
+
+        <!-- SENHA -->
+        <div>
+            <label class="text-primary/80 text-sm uppercase tracking-widest">
+                Senha Arcana
+            </label>
+            <input id="senha"
+                   type="password"
+                   placeholder="••••••••"
+                   class="w-full mt-2 bg-black/70 border border-primary/20 rounded-lg h-12 px-4 text-white focus:outline-none focus:border-primary transition">
+        </div>
+
+        <!-- BOTÃO LOGIN -->
+        <button type="submit"
+                class="mt-4 h-14 bg-[#1a232e] border border-primary/40 rounded-lg hover:scale-105 active:scale-95 transition-all text-primary font-bold tracking-widest uppercase">
+            Invocar Acesso
+        </button>
+    </form>
+
+    <!-- LINKS -->
+    <div class="mt-8 flex flex-col items-center gap-4 text-sm">
+
+        <button onclick="javaApp.irParaCadastro()"
+                class="text-primary/60 hover:text-primary uppercase tracking-widest">
+            Criar Novo Mestre
+        </button>
+
+        <button onclick="javaApp.voltar()"
+                class="flex items-center gap-2 text-primary/40 hover:text-primary uppercase tracking-widest">
+           
+            Voltar
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+function logar(event) {
+    event.preventDefault();
+
+    const username = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    if (!username || !senha) {
+        alert("Preencha todos os campos, Mestre.");
+        return;
+    }
+
+    javaApp.logar(username, senha);
+}
+
+</script>
+
+</body>
+</html>

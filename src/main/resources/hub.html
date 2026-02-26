@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hub de Gerenciamento da Guilda - O Oráculo das Quests</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=MedievalSharp&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: "#C5A028",
+        background: "#0a0a0c",
+        accentRed: "#7a0000",
+        gothic: "#1a1a1c"
+      },
+      fontFamily: {
+        display: ["Cinzel", "serif"],
+        body: ["Spectral", "serif"],
+        accent: ["MedievalSharp", "cursive"]
+      }
+    }
+  }
+}
+</script>
+
+<style>
+.gothic-shadow {
+  box-shadow: 0 10px 30px rgba(0,0,0,.8), inset 0 0 20px rgba(197,160,40,.05);
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 45px rgba(122,0,0,.35);
+}
+.glow-gold {
+  text-shadow: 0 0 10px rgba(197,160,40,.4);
+}
+</style>
+</head>
+
+<body class="bg-background text-stone-300 font-body min-h-screen overflow-x-hidden">
+
+<!-- FUNDO -->
+<div class="fixed inset-0 pointer-events-none opacity-30">
+  <img class="w-full h-full object-cover grayscale sepia brightness-50 contrast-125"
+       src="https://lh3.googleusercontent.com/aida-public/AB6AXuChRNU9zwmhRYmy4rIgqtrGWK5893gFaj2uuz0vcFhW6qLYvVI-tG6nvWI9ec0w1KtLBAjKIJ_qsYeDdcElCLel8D1SPG4mRq0vulwAoS11ZQxh0so-GtnPXuoEuC83lpnA8oobGd52WnT_xsBj6e6ej-otxCSDRpv-sSxcYjnaAjFgTG9emNrnon0uzt2KpOot1hUAmzGNl3mpaQoMjH1uEsYT6QJBa1Zynz83SAVrwweU9sDpQhIizXxxHkvaBXN7emhy7Obz0dg"/>
+</div>
+
+<div class="relative z-10 min-h-screen flex flex-col items-center justify-center p-10">
+
+<header class="text-center mb-16">
+  <p class="font-accent text-accentRed uppercase tracking-[0.3em] text-sm font-bold">
+    O Oráculo das Quests
+  </p>
+  <h1 class="font-display text-5xl font-black text-primary glow-gold uppercase">
+    Gerenciamento do Mural
+  </h1>
+  
+  <h2>Bem-vindo, <span id="nome"></span></h2>
+  
+</header>
+
+<main class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 max-w-7xl w-full">
+
+<!-- ADICIONAR -->
+<button onclick="chamarJava('addMissao')"
+ class="card-hover flex flex-col items-center p-8 bg-gothic border border-primary/20 rounded-lg gothic-shadow">
+  <h3 class="font-display text-xl font-bold">Adicionar Missão</h3>
+  <p class="text-sm text-stone-400 italic mt-2 text-center">
+    Escreva novos destinos nas crônicas.
+  </p>
+</button>
+
+<!-- EDITAR -->
+<button onclick="chamarJava('editarMissao')"
+ class="card-hover flex flex-col items-center p-8 bg-gothic border border-primary/20 rounded-lg gothic-shadow">
+  <h3 class="font-display text-xl font-bold">Editar Missão</h3>
+  <p class="text-sm text-stone-400 italic mt-2 text-center">
+    Ajuste contratos já selados.
+  </p>
+</button>
+
+<!-- REMOVER -->
+<button onclick="chamarJava('removerMissao')"
+ class="card-hover flex flex-col items-center p-8 bg-gothic border border-accentRed/30 rounded-lg gothic-shadow">
+  <h3 class="font-display text-xl font-bold text-accentRed">Remover Missão</h3>
+  <p class="text-sm text-stone-400 italic mt-2 text-center">
+    Apague registros proibidos.
+  </p>
+</button>
+
+<!-- VER MURAL -->
+<button onclick="chamarJava('verMural')"
+ class="card-hover flex flex-col items-center p-8 bg-gothic border border-primary/20 rounded-lg gothic-shadow">
+  <h3 class="font-display text-xl font-bold">Ver Mural</h3>
+  <p class="text-sm text-stone-400 italic mt-2 text-center">
+    Contemple todas as jornadas.
+  </p>
+</button>
+
+
+
+</main>
+
+<footer class="mt-20 text-xs tracking-widest uppercase text-stone-500">
+  Mural Conectado ao Reino
+  
+  <button class="order-2 md:order-1 px-8 py-3 text-amber-500/60 font-display hover:text-amber-500 transition-colors uppercase tracking-widest text-sm flex items-center gap-2" type="button" onclick="javaApp.logout()">
+                Logout
+            </button>
+</footer>
+
+</div>
+
+<script>
+function chamarJava(funcao) {
+    if (typeof javaApp === "undefined") {
+        alert("Conexão com o Oráculo ainda não foi estabelecida.");
+        return;
+    }
+
+    if (typeof javaApp[funcao] !== "function") {
+        alert("Função não encontrada no Oráculo: " + funcao);
+        return;
+    }
+
+    javaApp[funcao]();
+}
+</script>
+
+<script>
+document.getElementById("nome").innerText = javaApp.getNomeUsuario();
+</script>
+
+</body>
+</html>

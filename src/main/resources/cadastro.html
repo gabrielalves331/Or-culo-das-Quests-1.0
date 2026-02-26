@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+<script>
+tailwind.config = {
+    darkMode: "class",
+    theme: {
+        extend: {
+            colors: {
+                primary: "#c6a65d",
+                "wine-deep": "#2d1b1e",
+                "brown-deep": "#1a0f0a",
+                "arcane-blue": "#2c3e50"
+            },
+            fontFamily: {
+                display: ["Newsreader", "serif"]
+            }
+        }
+    }
+}
+</script>
+
+<style>
+body {
+    font-family: 'Newsreader', serif;
+    background: radial-gradient(circle at center, #2d1b1e 0%, #1a0f0a 100%);
+}
+.arcane-border {
+    border: 1px solid rgba(198, 166, 93, 0.3);
+    transition: all 0.3s ease;
+}
+.arcane-border:focus-within {
+    border-color: #c6a65d;
+    box-shadow: 0 0 15px rgba(198, 166, 93, 0.2);
+}
+.wood-panel {
+    background: linear-gradient(145deg, #241a15, #1a120e);
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 20px 50px rgba(0,0,0,0.5);
+}
+.glow-text {
+    text-shadow: 0 0 10px rgba(198, 166, 93, 0.5);
+}
+.corner-decoration {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    color: #c6a65d;
+    opacity: 0.4;
+}
+</style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4 selection:bg-primary/30 selection:text-primary">
+
+<div class="relative w-full max-w-2xl">
+
+<div class="absolute -inset-10 bg-primary/5 blur-3xl rounded-full opacity-50"></div>
+
+<div class="wood-panel relative overflow-hidden rounded-xl border-4 border-[#3a2a1f] p-8 md:p-16">
+
+<!-- Header -->
+<header class="text-center mb-12">
+<div class="inline-block mb-4">
+</div>
+<h1 class="text-primary text-4xl md:text-5xl font-bold tracking-tight glow-text mb-2">
+Ritual de Vinculação Arcana
+</h1>
+<p class="text-primary/70 text-lg italic">
+Registre um novo Mestre no Oráculo das Quests
+</p>
+<div class="h-px w-32 bg-gradient-to-r from-transparent via-primary/40 to-transparent mx-auto mt-6"></div>
+</header>
+
+<!-- FORM -->
+<form class="space-y-8 max-w-md mx-auto relative z-10"
+onsubmit="event.preventDefault(); cadastrar();">
+
+<!-- Nome -->
+<div class="flex flex-col gap-2">
+<label class="text-primary/80 text-sm font-medium uppercase tracking-widest px-1">
+Nome do Mestre
+</label>
+<div class="relative arcane-border rounded-lg bg-black/40">
+<input id="nome"
+class="w-full bg-transparent border-none focus:ring-0 text-white placeholder:text-primary/30 py-4 px-5 text-lg"
+placeholder="Insira sua alcunha heroica..."
+type="text"/>
+</div>
+</div>
+
+<!-- Senha -->
+<div class="flex flex-col gap-2">
+<label class="text-primary/80 text-sm font-medium uppercase tracking-widest px-1">
+Senha Secreta
+</label>
+<div class="relative arcane-border rounded-lg bg-black/40">
+<input id="senha"
+class="w-full bg-transparent border-none focus:ring-0 text-white placeholder:text-primary/30 py-4 px-5 text-lg"
+placeholder="Sua runa de proteção..."
+type="password"/>
+</div>
+</div>
+
+<!-- Botão -->
+<div class="pt-6">
+<button
+class="group relative w-full bg-[#1e293b] hover:bg-[#2c3e50] border border-primary/40 rounded-lg py-5 px-8 flex items-center justify-center gap-3 transition-all duration-300 shadow-lg hover:shadow-primary/20"
+type="submit">
+
+<span class="text-primary font-bold text-xl tracking-wide uppercase">
+Concluir Ritual
+</span>
+
+</button>
+</div>
+
+<!-- Voltar -->
+<div class="text-center pt-4">
+<a onclick="javaApp.voltar()"
+class="text-primary/50 hover:text-primary text-sm tracking-widest uppercase transition-colors flex items-center justify-center gap-2 cursor-pointer">
+
+Retornar ao Portal
+</a>
+</div>
+
+</form>
+
+</div>
+
+<p class="text-primary/30 text-center mt-8 text-xs uppercase tracking-[0.2em]">
+Protegido pelas Runas do Antigo Oráculo
+</p>
+
+</div>
+
+<script>
+function cadastrar() {
+    const nome = document.getElementById("nome").value;
+    const senha = document.getElementById("senha").value;
+
+    // Removido o !email que estava travando tudo
+    if (!nome || !senha) {
+        alert("A alcunha e a runa de proteção são obrigatórias para o ritual.");
+        return;
+    }
+
+    // Garanta que o método no Java se chama 'cadastrar' e recebe (String, String)
+    if (window.javaApp) {
+        javaApp.cadastrar(nome, senha);
+    } else {
+        console.error("Conexão com o Oráculo perdida (javaApp não injetado).");
+    }
+}
+</script>
+
+</body>
+</html>
