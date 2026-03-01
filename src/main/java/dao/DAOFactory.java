@@ -7,7 +7,6 @@ import dao.ModeloDAOJDBC;
 import dao.UsuarioDAO;
 import dao.UsuarioDAOJDBC;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DAOFactory {

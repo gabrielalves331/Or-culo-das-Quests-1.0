@@ -4,7 +4,7 @@
   <groupId>paginas</groupId>
   <artifactId>PaginaInicial</artifactId>
   <name>Oraculo_das_quests</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <build>
     <plugins>
       <plugin>

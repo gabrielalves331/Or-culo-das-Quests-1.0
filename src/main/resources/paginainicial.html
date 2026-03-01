@@ -144,6 +144,13 @@
             Que as lendas comecem!
         </span>
     </button>
+    
+    <button id="btnGrafo"
+class="iron-plaque px-10 py-4 rounded flex items-center justify-center gap-4">
+    <span class="font-display text-lg text-primary font-bold tracking-widest uppercase">
+        Ver Estrutura em Grafo
+    </span>
+</button>
 
     <button id="btnSair"
 class="mt-6 px-8 py-3 text-amber-500/60 font-display hover:text-amber-500 transition-colors uppercase tracking-widest text-sm">
@@ -200,7 +207,19 @@ window.addEventListener("load", function () {
 });
 </script>
 
+<script>
+window.addEventListener("load", function () {
+    const btn = document.getElementById("btnGrafo");
 
+    btn.onclick = function () {
+        if (window.javaApp) {
+            javaApp.abrirGrafo();
+        } else {
+            alert("Erro ao conectar com Java.");
+        }
+    };
+});
+</script>
 
 
 </body>

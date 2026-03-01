@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <script src="vis-network.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow: hidden; /* Evita rolagem na página */
+        }
+
+        #mynetwork {
+            width: 100%;
+            height: 100vh;
+            border: 1px solid lightgray;
+        }
+
+        .mensagem {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 20px;
+            color: gray;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="mynetwork"></div>
+
+<script>
+function iniciarGrafo() {
+
+    if (!window.javaJson) {
+        setTimeout(iniciarGrafo, 200);
+        return;
+    }
+
+    let dados;
+
+    try {
+        // O Java já deve estar enviando uma string JSON válida
+        dados = JSON.parse(window.javaJson);
+    } catch (erro) {
+        document.body.innerHTML =
+            "<div class='mensagem'>Erro ao interpretar JSON.</div>";
+        console.error(erro);
+        return;
+    }
+
+    if (!dados.nodes || dados.nodes.length === 0) {
+        document.body.innerHTML =
+            "<div class='mensagem'>Nenhum dado encontrado para exibir no grafo.</div>";
+        return;
+    }
+
+    const container = document.getElementById("mynetwork");
+
+    const data = {
+        nodes: new vis.DataSet(dados.nodes),
+        edges: new vis.DataSet(dados.edges)
+    };
+
+    // --- CONFIGURAÇÕES ORGANIZACIONAIS ---
+    const options = {
+        nodes: {
+            shape: "dot",
+            size: 16,
+            font: { size: 12 }
+        },
+        edges: {
+            arrows: { to: { enabled: true } },
+            color: { color: 'gray' }
+        },
+        // 1. Definição de Cores e Tamanhos por Grupo
+        groups: {
+            usuario: { color: {background: '#ff4d4d', border: '#b30000'}, size: 25 },
+            campanha: { color: {background: '#ffb84d', border: '#e67300'}, size: 20 },
+            missao: { color: {background: '#66b3ff', border: '#0066cc'}, size: 15 }
+        },
+        // 2. Layout Hierárquico (Usuário -> Campanha -> Missão)
+        layout: {
+            hierarchical: {
+                direction: "LR", // Esquerda para Direita
+                sortMethod: "directed",
+                nodeSpacing: 150
+            }
+        },
+        // 3. Física Ajustada para Layout Hierárquico
+        physics: {
+            hierarchicalRepulsion: {
+                nodeDistance: 150
+            }
+        }
+    };
+
+    // Inicializa a rede
+    new vis.Network(container, data, options);
+}
+
+window.onload = iniciarGrafo;
+</script>
+
+</body>
+</html>
