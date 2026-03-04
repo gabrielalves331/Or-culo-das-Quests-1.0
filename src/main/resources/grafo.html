@@ -1,23 +1,42 @@
 <!DOCTYPE html>
 <html>
+    
 <head>
     <meta charset="UTF-8">
 
-    <script src="vis-network.min.js"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            overflow: hidden; /* Evita rolagem na página */
-        }
+        #btnVoltar{
+    position:absolute;
+    top:20px;
+    left:20px;
+    padding:10px 18px;
+    background:#3d2b1f;
+    color:#d4c5a9;
+    border:2px solid #c6a75e;
+    font-family:"Cinzel", serif;
+    cursor:pointer;
+    z-index:999;
+}
 
-        #mynetwork {
-            width: 100%;
-            height: 100vh;
-            border: 1px solid lightgray;
-        }
+#btnVoltar:hover{
+    background:#5a3b28;
+}
+        
+       body{
+    margin:0;
+    background:#0b0f14;
+    color:#d4c5a9;
+    font-family: "EB Garamond", serif;
+}
+
+       #mynetwork{
+    width:100%;
+    height:100vh;
+    border:8px solid #3d2b1f;
+    background:#1e140d;
+}
 
         .mensagem {
             text-align: center;
@@ -26,35 +45,29 @@
             color: gray;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
-
+<button id="btnVoltar" onclick="javaApp.voltar()">
+← Voltar
+</button>
+    
 <div id="mynetwork"></div>
 
 <script>
-function iniciarGrafo() {
-
-    if (!window.javaJson) {
-        setTimeout(iniciarGrafo, 200);
-        return;
-    }
+function carregarGrafo(jsonString){
 
     let dados;
 
-    try {
-        // O Java já deve estar enviando uma string JSON válida
-        dados = JSON.parse(window.javaJson);
-    } catch (erro) {
+    try{
+        dados = JSON.parse(jsonString);
+    }catch(e){
         document.body.innerHTML =
-            "<div class='mensagem'>Erro ao interpretar JSON.</div>";
-        console.error(erro);
-        return;
-    }
-
-    if (!dados.nodes || dados.nodes.length === 0) {
-        document.body.innerHTML =
-            "<div class='mensagem'>Nenhum dado encontrado para exibir no grafo.</div>";
+        "<div class='mensagem'>Erro ao interpretar JSON.</div>";
+        console.error(e);
         return;
     }
 
@@ -65,44 +78,59 @@ function iniciarGrafo() {
         edges: new vis.DataSet(dados.edges)
     };
 
-    // --- CONFIGURAÇÕES ORGANIZACIONAIS ---
     const options = {
-        nodes: {
-            shape: "dot",
-            size: 16,
-            font: { size: 12 }
+    nodes:{
+        shape:"dot",
+        size:20,
+        font:{
+            size:16,
+            color:"#d4c5a9",
+            face:"Cinzel"
         },
-        edges: {
-            arrows: { to: { enabled: true } },
-            color: { color: 'gray' }
-        },
-        // 1. Definição de Cores e Tamanhos por Grupo
-        groups: {
-            usuario: { color: {background: '#ff4d4d', border: '#b30000'}, size: 25 },
-            campanha: { color: {background: '#ffb84d', border: '#e67300'}, size: 20 },
-            missao: { color: {background: '#66b3ff', border: '#0066cc'}, size: 15 }
-        },
-        // 2. Layout Hierárquico (Usuário -> Campanha -> Missão)
-        layout: {
-            hierarchical: {
-                direction: "LR", // Esquerda para Direita
-                sortMethod: "directed",
-                nodeSpacing: 150
+        borderWidth:2
+    },
+
+    edges:{
+        arrows:{
+            to:{
+                enabled:true,
+                scaleFactor:0.7
             }
         },
-        // 3. Física Ajustada para Layout Hierárquico
-        physics: {
-            hierarchicalRepulsion: {
-                nodeDistance: 150
-            }
+        color:{
+            color:"#c6a75e"
+        },
+        smooth:{
+            type:"cubicBezier",
+            forceDirection:"horizontal"
         }
-    };
+    },
 
-    // Inicializa a rede
-    new vis.Network(container, data, options);
+    groups:{
+        usuario:{ color:{ background:"#7a1f1f", border:"#c6a75e" } },
+        campanha:{ color:{ background:"#3d2b1f", border:"#c6a75e" } },
+        missao:{ color:{ background:"#2c2e33", border:"#c6a75e" } }
+    },
+
+    physics:{
+        hierarchicalRepulsion:{ nodeDistance:180 },
+        solver:"hierarchicalRepulsion"
+    },
+
+    interaction:{
+        zoomView:true,
+        dragView:true
+    }
+};
+
+const network = new vis.Network(container, data, options);
+
+network.on("selectNode", function(params){
+    const node = params.nodes[0];
+    console.log("Selecionado:", node);
+});
+
 }
-
-window.onload = iniciarGrafo;
 </script>
 
 </body>

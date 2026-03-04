@@ -1,9 +1,8 @@
 package paginas;
 
 import javax.swing.JFrame;
-import javax.swing.JButton;
 import java.awt.BorderLayout;
-
+import netscape.javascript.JSObject;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -12,11 +11,11 @@ import javafx.scene.web.WebView;
 
 public class GrafoWeb extends JFrame {
 
-    private PaginaInicialWeb paginaInicial; 
+    private PaginaInicialWeb paginaInicial;
 
     public GrafoWeb(String json, PaginaInicialWeb paginaInicial) {
 
-        this.paginaInicial = paginaInicial; 
+        this.paginaInicial = paginaInicial;
 
         setTitle("Estrutura em Grafo");
         setExtendedState(MAXIMIZED_BOTH);
@@ -25,43 +24,42 @@ public class GrafoWeb extends JFrame {
         setLayout(new BorderLayout());
 
         JFXPanel jfxPanel = new JFXPanel();
-
-        JButton voltar = new JButton("Voltar");
-
-        voltar.addActionListener(e -> {
-            paginaInicial.setVisible(true); // 👈 REABRE
-            dispose();                      // 👈 FECHA GRAFO
-        });
-
-        add(voltar, BorderLayout.SOUTH);
         add(jfxPanel, BorderLayout.CENTER);
 
         Platform.runLater(() -> {
+
             WebView webView = new WebView();
             WebEngine engine = webView.getEngine();
 
+            engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+
+    if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+
+        JSObject window = (JSObject) engine.executeScript("window");
+        window.setMember("javaApp", this);
+
+        System.out.println("JSON enviado ao WebView: " + json);
+
+        String jsonSeguro = json.replace("'", "\\'");
+
+        engine.executeScript("carregarGrafo('" + jsonSeguro + "');");
+    }
+});
+
             engine.load(
-                getClass().getClassLoader()
+                getClass()
+                .getClassLoader()
                 .getResource("grafo.html")
                 .toExternalForm()
             );
-
-            engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
-                    
-                    System.out.println("JSON enviado ao WebView: " + json);
-
-                    String safeJson = json.replace("\\", "\\\\")
-                                          .replace("'", "\\'")
-                                          .replace("\"", "\\\"");
-
-                    engine.executeScript("window.javaJson = \"" + safeJson + "\";");
-                }
-            });
 
             jfxPanel.setScene(new Scene(webView));
         });
 
         setVisible(true);
+    }
+     public void voltar() {
+        new PaginaInicialWeb();
+        dispose();
     }
 }
