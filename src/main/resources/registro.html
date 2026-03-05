@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Livro de Registros</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: serif;
+  background: #1a120b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.scene {
+  width: 95%;
+  max-width: 1100px;
+  height: 85vh;
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+              url('background.jpg');
+  background-size: cover;
+  border: 8px solid #2d241e;
+  border-radius: 12px;
+  box-shadow: 
+      0 0 0 4px #3b3028,
+      0 30px 80px rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Livro */
+.book {
+  width: 90%;
+  height: 90%;
+  background: #e6d5b8;
+  display: flex;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+  border: 2px solid #c9b089;
+}
+
+/* Página */
+.page {
+  flex: 1;
+  padding: 60px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #e6d5b8;
+}
+
+/* Divisão central */
+.spine {
+  width: 40px;
+  background: linear-gradient(90deg, #2d241e, #4a3b2f, #2d241e);
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 34px;
+  font-weight: bold;
+  font-style: italic;
+  color: #3a2c22;
+  letter-spacing: 1px;
+  border-bottom: 2px solid rgba(184,88,20,0.4);
+  padding-bottom: 10px;
+}
+
+p {
+  font-size: 19px;
+  line-height: 1.8;
+  color: #2d241e;
+  text-align: justify;
+}
+
+.page p::first-letter {
+  float: left;
+  font-size: 48px;
+  line-height: 1;
+  font-weight: bold;
+  margin-right: 8px;
+  color: #b85814;
+  font-family: serif;
+}
+
+.footer {
+  text-align: right;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Botões laterais */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 100px;
+  background: #b85814;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navLeft { left: 10px; }
+.navRight { right: 10px; }
+
+.navBtn:hover {
+  background: #d66a1e;
+}
+
+.topbar-wrapper {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 8px 25px;
+  background: rgba(26, 18, 11, 0.9);
+  backdrop-filter: blur(6px);
+  border-radius: 50px;
+  border: 1px solid rgba(184, 88, 20, 0.4);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+}
+
+.topbar h2 {
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #e6d5b8;
+}
+
+.topbar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.topbar svg {
+  width: 20px;
+  height: 20px;
+  stroke: #b85814;
+  transition: 0.2s;
+}
+
+.topbar button:hover svg {
+  stroke: white;
+}
+
+.separator {
+  width: 1px;
+  height: 18px;
+  background: rgba(184, 88, 20, 0.4);
+}
+
+</style>
+</head>
+
+<body onload="carregarRegistros()">
+
+<div class="scene">
+
+<button class="navBtn navLeft" onclick="anterior()">
+<svg width="24" height="24" fill="none" stroke="white" stroke-width="2"
+     viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round"
+      d="M15 19l-7-7 7-7"/>
+</svg>
+</button>
+
+<button class="navBtn navRight" onclick="proxima()">
+<svg width="24" height="24" fill="none" stroke="white" stroke-width="2"
+     viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round"
+      d="M9 5l7 7-7 7"/>
+</svg>
+</button>
+
+    <div class="topbar-wrapper">
+  <div class="topbar">
+
+    <!-- Ícone Livro -->
+    <button onclick="javaApp.voltarHub()">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 4h13a3 3 0 013 3v13H6.5A2.5 2.5 0 004 22V4z"/>
+      </svg>
+    </button>
+
+    <div class="separator"></div>
+
+    <h2>Livro de Registros</h2>
+
+    <div class="separator"></div>
+
+    <!-- Ícone Busca -->
+    <button onclick="alert('Busca futura 😌')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+        <circle cx="11" cy="11" r="8"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"
+              stroke-linecap="round"
+              stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+  </div>
+</div>
+    
+<div class="book">
+
+<div class="page">
+<div>
+<h1 id="tituloMissao">Carregando...</h1>
+<p id="descricaoMissao"></p>
+</div>
+<div class="footer" id="numeroPagina"></div>
+</div>
+
+<div class="spine"></div>
+
+<div class="page">
+<div>
+<h1>Detalhes</h1>
+<p id="detalhesMissao"></p>
+</div>
+
+</div>
+</div>
+
+<script>
+let missoes = [];
+let paginaAtual = 0;
+
+function carregarRegistros() {
+    try {
+        if (typeof javaApp !== "undefined") {
+            missoes = JSON.parse(javaApp.buscarConcluidas());
+        } else {
+            missoes = [];
+        }
+    } catch (e) {
+        missoes = [];
+    }
+    renderizarPagina();
+}
+
+function renderizarPagina() {
+
+    if (missoes.length === 0) {
+        document.getElementById("tituloMissao").innerText =
+            "Nenhuma crônica registrada ainda...";
+        document.getElementById("descricaoMissao").innerText = "";
+        document.getElementById("detalhesMissao").innerText = "";
+        document.getElementById("numeroPagina").innerText = "";
+        return;
+    }
+
+    const m = missoes[paginaAtual];
+
+    document.getElementById("tituloMissao").innerText = m.titulo;
+    document.getElementById("descricaoMissao").innerText = m.descricao;
+    document.getElementById("detalhesMissao").innerText =
+        "Dificuldade: " + m.dificuldade +
+        "\nRecompensa: " + m.recompensa;
+
+    document.getElementById("numeroPagina").innerText =
+        "Pág. " + (paginaAtual + 1) + " de " + missoes.length;
+}
+
+function proxima() {
+    if (paginaAtual < missoes.length - 1) {
+        paginaAtual++;
+        renderizarPagina();
+    }
+}
+
+function anterior() {
+    if (paginaAtual > 0) {
+        paginaAtual--;
+        renderizarPagina();
+    }
+}
+</script>
+
+</body>
+</html>

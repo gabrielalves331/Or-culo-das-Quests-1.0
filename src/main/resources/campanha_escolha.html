@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html class="dark" lang="pt-br">
 <head>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Selecionar Campanha</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@300;400;700&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 
 <script>
 tailwind.config = {
@@ -16,7 +16,9 @@ tailwind.config = {
         extend: {
             colors: {
                 primary: "#c6a65d",
-                background: "#0a0907"
+                background: "#0a0907",
+                parchment: "#d9c5a3",
+                stone: "#2a2824"
             },
             fontFamily: {
                 display: ["Newsreader", "serif"]
@@ -27,167 +29,177 @@ tailwind.config = {
 </script>
 
 <style>
-    .nav-container {
+body {
+    margin: 0;
+    font-family: "Newsreader", serif;
+    background: radial-gradient(circle at center, #2a1408 0%, #0d0702 70%);
+    color: white;
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 40px;
-    margin-top: 40px;
 }
 
-.nav-titulo {
-    font-size: 28px;
-    letter-spacing: 4px;
-    color: #d4af37;
-    font-family: "Cinzel", serif;
+/* ===== BASE ===== */
+.scroll {
+    position: relative;
+    overflow: hidden;
+    border-radius: 26px;
+    transition: 0.4s ease;
 }
 
-.nav-btn {
-    background: transparent;
-    border: 1px solid #d4af37;
-    color: #d4af37;
-    font-size: 28px;
-    padding: 8px 18px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+/* ===== CARD CENTRAL ===== */
+.scroll-center {
+    width: 300px;
+    height: 500px;
+    transform: scale(1.08);
+    background: linear-gradient(
+        180deg,
+        #e8c08f 0%,
+        #e6bf8a 35%,
+        #e1b27a 100%
+    );
+    box-shadow:
+        0 0 50px rgba(60,110,255,0.35),
+        0 30px 70px rgba(0,0,0,0.85);
 }
 
-.nav-btn:hover {
-    background: #d4af37;
-    color: #1a0f05;
-    box-shadow: 0 0 15px rgba(212,175,55,0.6);
+/* Topo encaixado */
+.scroll-center::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 8%;
+    width: 84%;
+    height: 36px;
+    background: #5a3825;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
 }
 
-    
-body {
-    font-family: "Newsreader", serif;
-    background: radial-gradient(circle at center, #1a110a 0%, #0a0907 100%);
+/* Base encaixada */
+.scroll-center::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 8%;
+    width: 84%;
+    height: 32px;
+    background: #5a3825;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
 }
-.scroll-card {
-    transition: all 0.4s ease;
+
+/* Luz real do papel */
+.inner-glow {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 50% 40%, rgba(255,255,255,0.35), transparent 55%),
+        radial-gradient(circle at 50% 85%, rgba(0,0,0,0.08), transparent 70%);
+    pointer-events: none;
 }
-.active {
-    transform: scale(1.15);
-    box-shadow: 0 0 40px rgba(198,166,93,0.4);
-}
-.campanha-card {
-    width: 260px;
+
+/* ===== LATERAIS ===== */
+.scroll-side {
+    width: 220px;
     height: 380px;
-    background: #8c7a63;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    cursor: pointer;
+    opacity: 0.75;
+    background: linear-gradient(
+        180deg,
+        #d9b383,
+        #c49a69
+    );
+    border-radius: 22px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.9);
 }
 
-.campanha-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4);
-}
+.rotate-left { transform: rotate(-6deg) scale(0.9); }
+.rotate-right { transform: rotate(6deg) scale(0.9); }
 
-.campanha-card.ativa {
-    background: #d4c2a1;
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
-    border: 1px solid #d4af37;
-}
-
-.nav-lateral {
-    background: transparent;
-    border: 1px solid #c6a65d;
-    color: #c6a65d;
-    font-size: 28px;
-    width: 50px;
-    height: 80px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.nav-lateral:hover {
-    background: #c6a65d;
-    color: #0a0907;
-    box-shadow: 0 0 20px rgba(198,166,93,0.6);
-    transform: scale(1.1);
-}
-
+/* ===== TÍTULO ===== */
 .titulo-campanha {
-    font-family: "Newsreader", serif;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #1a1208;
-}
-
-.subtitulo-campanha {
-    font-size: 12px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 34px;
     letter-spacing: 2px;
-    opacity: 0.6;
+    text-transform: uppercase;
+    color: #2b2723;
 }
 
-
-
-body {
-    background: radial-gradient(circle at center, #1a0f05 0%, #0d0702 100%);
+/* Linha */
+.linha {
+    width: 60%;
+    margin: 20px auto;
+    border: none;
+    border-top: 1px solid rgba(0,0,0,0.2);
 }
 
+/* Navegação */
+.nav-svg {
+    width: 70px;
+    height: 70px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #c6a65d;
+    transition: 0.3s ease;
+}
+
+.nav-svg:hover {
+    color: white;
+    transform: scale(1.15);
+}
+
+/* Botões inferiores */
+.footer-buttons button {
+    padding: 12px 28px;
+    background: linear-gradient(145deg, #3a3834, #1a1917);
+    border: 1px solid #4a4844;
+    color: white;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: 0.2s;
+}
+
+.footer-buttons button:hover {
+    border-color: #c6a65d;
+    color: #c6a65d;
+}
 </style>
 </head>
 
-<body class="min-h-screen flex flex-col items-center justify-center text-white p-6">
-    
+<body>
 
-<h1 class="text-4xl font-bold text-primary mb-12 tracking-widest uppercase">
-    Escolha sua Jornada
-</h1>
-    
-    
-<div class="flex items-center justify-center gap-8 mt-6">
+<div class="text-center mb-16">
+    <h2 class="text-primary text-xl tracking-widest uppercase mb-4">Oráculo das Quests</h2>
+    <h1 class="text-5xl italic font-display">Selecione sua Jornada</h1>
+</div>
 
-    <!-- Botão Esquerda -->
-    <button onclick="anterior()"
-        class="nav-lateral">
-        &#10094;
-    </button>
+<div class="flex items-center gap-10">
 
-    <!-- Carrossel -->
-    <div id="carrossel"
-        class="flex items-center justify-center gap-12 transition-all duration-500">
-    </div>
+<button onclick="anterior()" class="nav-svg">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <polyline points="15 18 9 12 15 6"/>
+</svg>
+</button>
 
-    <!-- Botão Direita -->
-    <button onclick="proximo()"
-        class="nav-lateral">
-        &#10095;
-    </button>
+<div id="carrossel" class="flex items-end gap-12"></div>
+
+<button onclick="proximo()" class="nav-svg">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <polyline points="9 18 15 12 9 6"/>
+</svg>
+</button>
 
 </div>
 
-
-
-<!-- BOTÕES -->
-<div class="mt-16 flex gap-6 flex-wrap justify-center">
-
-    <button onclick="javaApp.criarNova()"
-        class="bg-[#2c3338] border border-primary/40 text-primary px-8 py-3 rounded uppercase tracking-widest">
-        Criar Nova
-    </button>
-
-    <button onclick="entrar()"
-        class="bg-[#2c3338] border border-primary/40 text-primary px-8 py-3 rounded uppercase tracking-widest">
-        Entrar
-    </button>
-
-    <button onclick="excluir()"
-        class="bg-[#2c3338] border border-red-700 text-red-400 px-8 py-3 rounded uppercase tracking-widest">
-        Excluir
-    </button>
-
-    <button onclick="javaApp.voltarlogin()"
-        class="bg-[#2c3338] border border-primary/40 text-primary px-8 py-3 rounded uppercase tracking-widest">
-        Voltar
-    </button>
-
+<div class="footer-buttons mt-20 flex gap-6 flex-wrap justify-center">
+    <button onclick="javaApp.criarNova()">Criar Nova</button>
+    <button onclick="entrar()">Entrar</button>
+    <button onclick="excluir()">Excluir</button>
+    <button onclick="javaApp.voltarlogin()">Voltar</button>
 </div>
 
 <script>
@@ -197,78 +209,83 @@ let indexAtual = 0;
 function render() {
     const container = document.getElementById("carrossel");
     container.innerHTML = "";
+    if (!campanhas.length) return;
 
-    campanhas.forEach((c, index) => {
+    const anteriorIndex = (indexAtual - 1 + campanhas.length) % campanhas.length;
+    const proximoIndex = (indexAtual + 1) % campanhas.length;
 
-        const card = document.createElement("div");
-        card.className = "scroll-card w-56 h-80 bg-[#d9c5a3] text-black rounded p-6 flex flex-col justify-between text-center";
+    container.innerHTML += criarScroll(campanhas[anteriorIndex], "left");
+    container.innerHTML += criarScroll(campanhas[indexAtual], "center");
+    container.innerHTML += criarScroll(campanhas[proximoIndex], "right");
+}
 
-        if (index === indexAtual) {
-            card.classList.add("active");
-        } else {
-            card.style.opacity = "0.5";
-            card.style.transform = "scale(0.9)";
-        }
+function criarScroll(campanha, posicao) {
 
-        card.innerHTML = `
-            <div>
-                <h3 class="titulo-campanha">${c.nome}</h3>
+    if (posicao === "center") {
+        return `
+        <div class="flex flex-col items-center">
+            <div class="scroll scroll-center flex flex-col justify-center text-stone text-center px-10 relative">
+
+                <div class="inner-glow"></div>
+
+                <div>
+                    <h3 class="titulo-campanha">
+                        ${campanha.nome}
+                    </h3>
+
+                    <hr class="linha">
+
+                    <p class="text-sm italic opacity-70">
+                        Arquivo Arcano #${campanha.id}
+                    </p>
+                </div>
 
             </div>
-            <div class="subtitulo-campanha">
-            Arquivo Arcano #${c.id}
-            </div>
 
+            <p class="mt-6 text-blue-400 tracking-widest uppercase">
+                Aventura Atual
+            </p>
+        </div>
         `;
+    }
 
-        card.onclick = () => {
-            indexAtual = index;
-            render();
-        };
-
-        container.appendChild(card);
-    });
+    return `
+        <div class="scroll scroll-side ${posicao === "left" ? "rotate-left" : "rotate-right"} p-6 flex items-center justify-center text-stone text-center">
+            <h3 class="italic font-bold">
+                ${campanha.nome}
+            </h3>
+        </div>
+    `;
 }
 
 function anterior() {
-    if (campanhas.length === 0) return;
+    if (!campanhas.length) return;
     indexAtual = (indexAtual - 1 + campanhas.length) % campanhas.length;
     render();
 }
 
 function proximo() {
-    if (campanhas.length === 0) return;
+    if (!campanhas.length) return;
     indexAtual = (indexAtual + 1) % campanhas.length;
     render();
 }
 
 function entrar() {
-    if (campanhas.length === 0) return;
-    const selecionada = campanhas[indexAtual];
-    javaApp.selecionarCampanha(selecionada.id);
+    if (!campanhas.length) return;
+    javaApp.selecionarCampanha(campanhas[indexAtual].id);
 }
 
 function excluir() {
-    if (campanhas.length === 0) return;
-    const selecionada = campanhas[indexAtual];
-
+    if (!campanhas.length) return;
     if (!confirm("Deseja excluir esta campanha?")) return;
-
-    javaApp.excluirCampanha(selecionada.id);
+    javaApp.excluirCampanha(campanhas[indexAtual].id);
 }
 
 function carregarCampanhas(lista) {
-    campanhas = lista;
-
-    if (!campanhas || campanhas.length === 0) {
-        document.getElementById("carrossel").innerHTML =
-            "<p class='text-primary/60'>Nenhuma campanha encontrada.</p>";
-        return;
-    }
-
+    campanhas = lista || [];
+    indexAtual = 0;
     render();
 }
-
 </script>
 
 </body>

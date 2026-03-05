@@ -1,7 +1,13 @@
 package paginas;
 
+import dao.GrafoDAO;
+import util.DFSService;
+
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
+import java.sql.*;
+import java.util.*;
+
 import netscape.javascript.JSObject;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -33,18 +39,15 @@ public class GrafoWeb extends JFrame {
 
             engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
 
-    if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
 
-        JSObject window = (JSObject) engine.executeScript("window");
-        window.setMember("javaApp", this);
+                    JSObject window = (JSObject) engine.executeScript("window");
+                    window.setMember("javaApp", this);
 
-        System.out.println("JSON enviado ao WebView: " + json);
-
-        String jsonSeguro = json.replace("'", "\\'");
-
-        engine.executeScript("carregarGrafo('" + jsonSeguro + "');");
-    }
-});
+                    String jsonSeguro = json.replace("'", "\\'");
+                    engine.executeScript("carregarGrafo('" + jsonSeguro + "');");
+                }
+            });
 
             engine.load(
                 getClass()
@@ -58,7 +61,57 @@ public class GrafoWeb extends JFrame {
 
         setVisible(true);
     }
-     public void voltar() {
+
+   public String executarDFS(String inicio) {
+
+    Map<String, List<String>> adjacencia = new HashMap<>();
+
+    try (Connection conn = DriverManager.getConnection("jdbc:sqlite:oraculo_das_quests.db");
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(
+                 "SELECT " +
+                 "u.id as usuario_id, " +
+                 "c.id as campanha_id, " +
+                 "m.id as missao_id " +
+                 "FROM usuarios u " +
+                 "LEFT JOIN campanhas c ON c.usuario_id = u.id " +
+                 "LEFT JOIN missoes m ON m.campanha_id = c.id"
+         );) {
+
+        while (rs.next()) {
+
+            String usuarioId = "u" + rs.getInt("usuario_id");
+            int campanhaInt = rs.getInt("campanha_id");
+            int missaoInt = rs.getInt("missao_id");
+
+            if (campanhaInt > 0) {
+                String campanhaId = "c" + campanhaInt;
+
+                adjacencia.putIfAbsent(usuarioId, new ArrayList<>());
+                adjacencia.get(usuarioId).add(campanhaId);
+
+                if (missaoInt > 0) {
+                    String missaoId = "m" + missaoInt;
+
+                    adjacencia.putIfAbsent(campanhaId, new ArrayList<>());
+                    adjacencia.get(campanhaId).add(missaoId);
+                }
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    DFSService dfs = new DFSService(adjacencia);
+
+    List<String> visitados = dfs.executarDFS(inicio);
+
+    return new com.google.gson.Gson().toJson(visitados);
+    
+}
+
+    public void voltar() {
         new PaginaInicialWeb();
         dispose();
     }

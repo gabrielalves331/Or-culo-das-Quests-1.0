@@ -148,6 +148,20 @@
                    font-serif text-xl ink-text 
                    focus:ring-0 focus:border-primary"/>
     </div>
+    
+    <!-- Status -->
+<div>
+    <label class="block font-gothic text-xs text-stone-600 uppercase mb-2 tracking-widest">
+        Estado
+    </label>
+    <select id="mission-status"
+        class="w-full bg-transparent border border-stone-500/40 
+               font-serif text-xl ink-text 
+               focus:ring-0 focus:border-primary">
+        <option value="PENDENTE">Pendente</option>
+        <option value="CONCLUIDA">Concluída</option>
+    </select>
+</div>
 
 </div>
 
@@ -190,6 +204,7 @@ function carregarMissao(m) {
     document.getElementById("mission-difficulty").value = m.dificuldade;
     document.getElementById("mission-reward").value = m.recompensa;
     document.getElementById("mission-origin").value = m.origem;
+    document.getElementById("mission-status").value = m.status;
     
 }
 
@@ -203,13 +218,15 @@ function salvar() {
     const dificuldade = document.getElementById("mission-difficulty").value;
     const recompensa = document.getElementById("mission-reward").value;
     const origem = document.getElementById("mission-origin").value;
+    const status = document.getElementById("mission-status").value;
 
     javaApp.salvarMissao(
         titulo,
         descricao,
         dificuldade,
         recompensa,
-        origem
+        origem,
+        status
     );
 }
 

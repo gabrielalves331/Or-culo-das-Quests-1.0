@@ -39,7 +39,7 @@ public class EdicaoWeb extends BaseWebFrame {
   
   public void salvarMissao(String titulo, String descricao,
                          String dificuldade, String recompensa,
-                         String origem) {
+                         String origem, String status) {
     try {
         MissaoDAO dao = DAOFactory.criarMissaoDAO();
 
@@ -49,7 +49,8 @@ public class EdicaoWeb extends BaseWebFrame {
         m.setDescricao(descricao);
         m.setDificuldade(dificuldade);
         m.setRecompensa(recompensa);
-        m.setOrigem(origem);   // ← FALTAVA ISSO
+        m.setOrigem(origem);
+        m.setStatus(status); // ← AGORA SIM
 
         dao.atualizar(m);
 

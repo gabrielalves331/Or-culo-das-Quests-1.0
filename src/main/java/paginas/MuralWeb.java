@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dao.DAOFactory;
 import dao.MissaoDAO;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.SwingUtilities;
 import modelo.Missao;
 import util.Sessao;
@@ -35,12 +36,15 @@ public class MuralWeb extends BaseWebFrame {
         System.out.println("ID: " + Sessao.campanhaAtual.getId());
 
         MissaoDAO dao = DAOFactory.criarMissaoDAO();
-        List<Missao> lista = dao.listarPorCampanha(
-            Sessao.campanhaAtual.getId()
-        );
+
+        List<Missao> todas = dao.listarPorCampanha(Sessao.campanhaAtual.getId());
+
+        List<Missao> pendentes = todas.stream()
+                .filter(m -> !"CONCLUIDA".equalsIgnoreCase(m.getStatus()))
+                .collect(Collectors.toList());
 
         Gson gson = new Gson();
-        return gson.toJson(lista);
+        return gson.toJson(pendentes);
 
     } catch (Exception e) {
         e.printStackTrace();

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
-    
+
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
-    <style>
-        #btnVoltar{
+<style>
+#btnVoltar{
     position:absolute;
     top:20px;
     left:20px;
@@ -19,45 +19,63 @@
     cursor:pointer;
     z-index:999;
 }
+#btnVoltar:hover{ background:#5a3b28; }
 
-#btnVoltar:hover{
-    background:#5a3b28;
+#btnDFS{
+    position:absolute;
+    top:20px;
+    right:20px;
+    padding:10px 18px;
+    background:#1f3d2b;
+    color:#d4c5a9;
+    border:2px solid #3ecf8e;
+    font-family:"Cinzel", serif;
+    cursor:pointer;
+    z-index:999;
 }
-        
-       body{
+#btnDFS:hover{ background:#285a3d; }
+
+body{
     margin:0;
     background:#0b0f14;
     color:#d4c5a9;
     font-family: "EB Garamond", serif;
 }
 
-       #mynetwork{
+#mynetwork{
     width:100%;
     height:100vh;
     border:8px solid #3d2b1f;
     background:#1e140d;
 }
 
-        .mensagem {
-            text-align: center;
-            margin-top: 50px;
-            font-size: 20px;
-            color: gray;
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+.mensagem {
+    text-align:center;
+    margin-top:50px;
+    font-size:20px;
+    color:gray;
+}
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
 
 </head>
 
 <body>
-<button id="btnVoltar" onclick="javaApp.voltar()">
-← Voltar
-</button>
-    
+
+<button id="btnVoltar" onclick="javaApp.voltar()">← Voltar</button>
+<button id="btnDFS" onclick="executarDFS()">Executar DFS</button>
+
 <div id="mynetwork"></div>
 
 <script>
+
+let network;
+let nodes;
+let edges;
+let selectedNode = null;
+
 function carregarGrafo(jsonString){
 
     let dados;
@@ -73,64 +91,113 @@ function carregarGrafo(jsonString){
 
     const container = document.getElementById("mynetwork");
 
-    const data = {
-        nodes: new vis.DataSet(dados.nodes),
-        edges: new vis.DataSet(dados.edges)
-    };
+    nodes = new vis.DataSet(dados.nodes);
+    edges = new vis.DataSet(dados.edges);
+
+    const data = { nodes: nodes, edges: edges };
 
     const options = {
-    nodes:{
-        shape:"dot",
-        size:20,
-        font:{
-            size:16,
-            color:"#d4c5a9",
-            face:"Cinzel"
-        },
-        borderWidth:2
-    },
 
-    edges:{
-        arrows:{
-            to:{
-                enabled:true,
-                scaleFactor:0.7
-            }
+        nodes:{
+            shape:"dot",
+            size:20,
+            font:{
+                size:16,
+                color:"#d4c5a9",
+                face:"Cinzel"
+            },
+            borderWidth:2
         },
-        color:{
-            color:"#c6a75e"
+
+        edges:{
+            arrows:{ to:{ enabled:true, scaleFactor:0.7 } },
+            color:{ color:"#c6a75e" },
+            smooth:{ type:"cubicBezier", forceDirection:"horizontal" }
         },
-        smooth:{
-            type:"cubicBezier",
-            forceDirection:"horizontal"
+
+        groups:{
+            usuario:{ color:{ background:"#7a1f1f", border:"#c6a75e" } },
+            campanha:{ color:{ background:"#3d2b1f", border:"#c6a75e" } },
+            missao:{ color:{ background:"#2c2e33", border:"#c6a75e" } }
+        },
+
+        physics:{
+            hierarchicalRepulsion:{ nodeDistance:180 },
+            solver:"hierarchicalRepulsion"
+        },
+
+        interaction:{
+            zoomView:true,
+            dragView:true
         }
-    },
+    };
 
-    groups:{
-        usuario:{ color:{ background:"#7a1f1f", border:"#c6a75e" } },
-        campanha:{ color:{ background:"#3d2b1f", border:"#c6a75e" } },
-        missao:{ color:{ background:"#2c2e33", border:"#c6a75e" } }
-    },
+    network = new vis.Network(container, data, options);
 
-    physics:{
-        hierarchicalRepulsion:{ nodeDistance:180 },
-        solver:"hierarchicalRepulsion"
-    },
+    // 🔥 Captura nó selecionado
+    network.on("selectNode", function(params){
+        selectedNode = params.nodes[0];
+        console.log("Selecionado:", selectedNode);
+    });
 
-    interaction:{
-        zoomView:true,
-        dragView:true
-    }
-};
-
-const network = new vis.Network(container, data, options);
-
-network.on("selectNode", function(params){
-    const node = params.nodes[0];
-    console.log("Selecionado:", node);
-});
-
+    network.on("deselectNode", function(){
+        selectedNode = null;
+    });
 }
+
+async function executarDFS(){
+
+    const DELAY = 1500;
+
+    if(!selectedNode){
+        alert("Selecione um nó primeiro.");
+        return;
+    }
+
+    // Pausa física se quiser manter estabilidade
+    network.stopSimulation();
+
+    // Resetar cores
+    nodes.forEach(n => {
+        nodes.update({
+            id: n.id,
+            color: null
+        });
+    });
+
+    let visitados = JSON.parse(javaApp.executarDFS(selectedNode));
+
+    for(let i = 0; i < visitados.length; i++){
+
+        let id = visitados[i];
+
+        // 🟡 Marca como nó atual
+        nodes.update({
+            id: id,
+            color:{
+                background:"#ffd43b",
+                border:"#f59f00"
+            }
+        });
+
+        await new Promise(resolve =>
+            setTimeout(resolve, DELAY)
+        );
+
+        // 🟢 Marca como visitado definitivo
+        nodes.update({
+            id: id,
+            color:{
+                background:"#00ff88",
+                border:"#00cc66"
+            }
+        });
+    }
+
+    // Religa física depois de tudo
+    network.startSimulation();
+}
+
 </script>
 
 </body>

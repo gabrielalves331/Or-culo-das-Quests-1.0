@@ -40,6 +40,11 @@ public class HubWeb extends BaseWebFrame {
         dispose();
     }
     
+    public void verRegistro() {
+    new RegistroWeb(Sessao.campanhaAtual.getId());
+    dispose();
+}
+    
     public String getNomeUsuario() {
     return Sessao.usuarioLogado.getNome();
 }

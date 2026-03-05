@@ -29,7 +29,10 @@ public abstract class BaseWebFrame extends JFrame {
         WebView view = new WebView();
         engine = view.getEngine();
 
-        URL url = getClass().getResource("/" + html);
+        URL url = BaseWebFrame.class.getResource("/" + html);
+        System.out.println(
+    BaseWebFrame.class.getResource("/registro.html")
+);
         if (url == null) {
             System.out.println("Arquivo NÃO encontrado: " + html);
             return;
@@ -73,6 +76,13 @@ public abstract class BaseWebFrame extends JFrame {
                     String json = campanhas.buscarCampanhas();
                     engine.executeScript("carregarCampanhas(" + json + ");");
                 }
+                
+                // ================= Registros =================
+
+                if (this instanceof RegistroWeb registro) {
+    String json = registro.buscarConcluidas();
+    engine.executeScript("carregarRegistros(" + json + ");");
+}
  
             }
         });
