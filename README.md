@@ -1,149 +1,235 @@
-Oráculo das Quests
+# Oráculo das Quests
 
-Sistema de gerenciamento de missões utilizando Java, Swing, JDBC e MySQL.
+Sistema web para gerenciamento de campanhas e missões de RPG com **visualização estrutural em grafos do banco de dados**.
 
-O Oráculo das Quests é um sistema desktop para gerenciar missões (quests).
-Ele permite cadastrar, visualizar, editar e remover missões utilizando uma interface gráfica construída em Java Swing, 
-com persistência de dados em MySQL e acesso via JDBC.
+O projeto integra:
 
-O projeto foi desenvolvido seguindo o padrão MVC e boas práticas de separação de camadas.
+* Java + JDBC
+* SQLite
+* HTML
+* Visualização de Grafos com vis-network
 
---> Funcionalidades <--
+---
 
-* Cadastrar nova missão
+# Objetivo do Projeto
 
-* Listar missões na JTable
+O **Oráculo das Quests** foi desenvolvido para:
 
-* Editar missões existentes
+* Gerenciar campanhas de RPG
+* Organizar missões
+* Controlar usuários
+* Visualizar relações entre campanhas e missões
+* Representar os dados do banco como um **grafo interativo**
 
-* Excluir missões
+Além do gerenciamento tradicional, o sistema agora permite analisar estruturalmente os dados através de uma **modelagem em grafos**, conectando:
 
-* Visualização completa da descrição com duplo clique
+* Campanhas
+* Missões
+* Relações entre entidades
 
-* Atualização dinâmica da tabela
+---
 
---> Atributos disponíveis: <--
+# 🛠️ Tecnologias Utilizadas
 
-Título
+| Tecnologia       | Finalidade             |
+| ---------------- | ---------------------- |
+| Java             | Lógica da aplicação    |
+| JDBC             | Comunicação com banco  |
+| SQLite           | Banco de dados local   |
+| Maven            | Build e gerenciamento  |
+| JavaFX / WebView | Interface              |
+| HTML             | Estrutura das páginas  |
+| vis-network.js   | Visualização de grafos |
 
-Descrição
+---
 
-Dificuldade
+# Arquitetura do Sistema
 
-Recompensa
+O sistema segue uma arquitetura em camadas:
 
-Status (concluída ou não)
+```
+Interface HTML
+      ↓
+Paginas (Controllers)
+      ↓
+Modelo (Entidades)
+      ↓
+DAO (Persistência)
+      ↓
+SQLite
+```
 
---> Arquitetura do Projeto (MVC)  <--
-Modelo (Model)
+Com a adição da camada de visualização em grafos:
 
-Representa as entidades e regras de negócio.
-Ex: Missao.java
+```
+Banco de Dados
+      ↓
+GrafoDAO
+      ↓
+GeradorGrafoJson
+      ↓
+grafo.json
+      ↓
+grafo.html (vis-network)
+```
 
-Visão (View)
+---
 
-Interface gráfica feita em Swing (JFrames e Forms).
-Ex: QuadroQuests.java, InsercaoMissao.java, etc.
+# Estrutura do Projeto
 
-Controle & DAO
+```
+src/main/java
+ ├── dao
+ │    ├── CampanhaDAO
+ │    ├── MissaoDAO
+ │    ├── UsuarioDAO
+ │    ├── GrafoDAO
+ │
+ ├── modelo
+ │    ├── Campanha
+ │    ├── Missao
+ │    ├── Usuario
+ │
+ ├── paginas
+ │    ├── LoginWeb
+ │    ├── HubWeb
+ │    ├── GrafoWeb
+ │
+ └── util
+      ├── Sessao
+      ├── GeradorGrafoJson
+```
 
-Acesso ao banco via JDBC através de classes DAO.
-Ex: MissaoDAOJDBC.java
+---
 
-TableModel
+#  Visualização em Grafos
 
-Realiza a ponte entre a GUI e os objetos Java.
-Ex: MissaoTableModel.java
+O sistema gera automaticamente um arquivo:
 
-🛠️ Tecnologias Utilizadas
+```
+grafo.json
+```
 
-Java (JDK 17+)
+Esse arquivo representa os dados estruturados como:
 
-Swing (interface gráfica)
+* Nós (Campanhas e Missões)
+* Arestas (Relacionamentos)
 
-MySQL
+A visualização é feita em:
 
-JDBC
+```
+grafo.html
+```
 
-Maven
+utilizando a biblioteca:
 
-NetBeans (IDE usada no desenvolvimento)
+```
+vis-network.min.js
+```
 
---> Banco de Dados <--
-Script SQL utilizado:
-CREATE DATABASE `oraculo_das_quests`;
+A visualização permite:
 
-CREATE TABLE `missoes` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `titulo` varchar(255) NOT NULL,
-  `descricao` text,
-  `dificuldade` varchar(50) DEFAULT NULL,
-  `recompensa` varchar(255) DEFAULT NULL,
-  `concluida` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+* Explorar conexões entre campanhas e missões
+* Identificar estruturas
+* Analisar relações de forma interativa
 
---> DER (Diagrama Entidade-Relacionamento) <--
+---
 
-O banco possui apenas uma entidade:
+# Banco de Dados
 
-+===============================+
-|MISSOES                        |
-|-------------------------------|
-|PK id : int                    |
-|titulo : varchar(255)          |
-|descricao : text               |
-|dificuldade : varchar(50)      |
-|recompensa : varchar(255)      |
-|concluida : tinyint(1)         |
-+===============================+
+Banco local:
 
---> Como Executar <--
-1. Clone o repositório
-git clone https://github.com/gabrielalves331/O-Oraculo-das-Quests.git
+```
+oraculo_das_quests.db
+```
 
-2. Configure o Banco de Dados
+Contém:
 
-Importe o script SQL acima no MySQL
+* Usuários
+* Campanhas
+* Missões
 
-Configure o usuário/senha e URL no DAO (ex.: jdbc:mysql://localhost/oraculo_das_quests)
+---
 
-3. Execute o projeto
+# Como Executar o Projeto
 
-Abra no NetBeans (ou outra IDE)
+## Pré-requisitos
 
-Execute o arquivo principal (ex.: PaginaInicial.java)
+* Java JDK 17+
+* Maven
 
-A interface gráfica será aberta 💻
+---
 
---> Estrutura de Pastas <--
-src/
- ├── dao/          # Acesso ao banco de dados (DAO + JDBC)
- ├── modelo/       # Classes de modelo
- └── paginas/      # Interface gráfica (Swing)
+## Clonar
 
-pom.xml            # Configuração Maven
-README.md          # Este arquivo
+```
+git clone https://github.com/gabrielalves331/Or-culo-das-Quests-1.0.git
+cd Or-culo-das-Quests-1.0
+```
 
---> Melhorias Futuras <--
+---
 
-Filtros por dificuldade / título / status
+## Compilar
 
-Adicionar usuários com login
+```
+mvn clean install
+```
 
-Logs de histórico
+---
 
-Versão Web (Spring Boot)
+## Executar
 
-Categorias de missões
+```
+mvn exec:java
+```
 
-Autor
+ou
+
+```
+java -jar target/PaginaInicial-1.0.jar
+```
+
+---
+
+# Funcionalidades
+
+✔ Cadastro e login de usuários
+✔ Criação de campanhas
+✔ Inserção e edição de missões
+✔ Remoção de dados
+✔ Mural informativo
+✔ Visualização estrutural em grafos
+✔ Geração automática de JSON
+
+---
+
+# Conceito Acadêmico Envolvido
+
+O projeto integra conceitos de:
+
+* Estruturas de Dados (Grafos)
+* Persistência com DAO
+* Arquitetura em Camadas
+* Conversão de dados para JSON
+* Visualização de dados
+* Integração backend → frontend
+
+---
+
+# Melhorias Futuras
+
+* Algoritmos de busca em grafos (DFS, BFS)
+* Caminho mínimo entre missões
+* Métricas de centralidade
+* Exportação do grafo como imagem
+* Deploy web com Spring Boot
+
+---
+
+# Autor
 
 Gabriel Alves
-gabrielalves33147@gmail.com
+Estudante de Ciência da Computação – IFBA
 
-Projeto acadêmico desenvolvido para a disciplina de Programação Orientada a Objetos.
-
---> Licença <--
-
-Este projeto é livre para fins acadêmicos e pessoais.
+GitHub:
+https://github.com/gabrielalves331
