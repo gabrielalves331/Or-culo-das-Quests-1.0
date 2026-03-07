@@ -10,15 +10,51 @@ public class DFSService {
         this.adjacencia = adjacencia;
     }
 
-    public List<String> executarDFS(String inicio) {
+   public List<String> executarDFS(String inicio, String destino) {
 
-        List<String> visitados = new ArrayList<>();
-        Set<String> marcados = new HashSet<>();
+    List<String> caminho = new ArrayList<>();
+    Set<String> visitados = new HashSet<>();
 
-        dfs(inicio, marcados, visitados);
+    boolean encontrou = dfs(inicio, destino, visitados, caminho);
 
-        return visitados;
+    if (!encontrou) {
+        return new ArrayList<>(); // caminho vazio
     }
+
+    return caminho;
+}
+
+private boolean dfs(String atual,
+                    String destino,
+                    Set<String> visitados,
+                    List<String> caminho) {
+
+    visitados.add(atual);
+    caminho.add(atual);
+
+    if (atual.equals(destino)) {
+        return true;
+    }
+
+    if (!adjacencia.containsKey(atual)) {
+        caminho.remove(caminho.size()-1);
+        return false;
+    }
+
+    for (String vizinho : adjacencia.get(atual)) {
+
+        if (!visitados.contains(vizinho)) {
+
+            boolean encontrou = dfs(vizinho, destino, visitados, caminho);
+
+            if (encontrou) return true;
+        }
+    }
+
+    // backtracking
+    caminho.remove(caminho.size()-1);
+    return false;
+}
 
     private void dfs(String atual,
                      Set<String> marcados,

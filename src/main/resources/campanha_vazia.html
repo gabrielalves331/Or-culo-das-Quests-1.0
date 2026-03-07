@@ -48,6 +48,15 @@ body {
     box-shadow: 0 0 30px rgba(198, 166, 93, 0.4);
     transform: translateY(-2px);
 }
+@keyframes sparkle {
+    0% { opacity: 0.4; transform: scale(0.95); }
+    50% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 0.4; transform: scale(0.95); }
+}
+
+.sparkle {
+    animation: sparkle 3s infinite ease-in-out;
+}
 </style>
 </head>
 
@@ -57,10 +66,17 @@ body {
 
     <!-- Ícone central -->
     <div class="mb-12">
-        <span class="material-symbols-outlined text-[140px] text-primary/20">
-            ✨
-        </span>
-    </div>
+    <svg class="w-[140px] h-[140px] text-primary/20 sparkle"
+         xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 24 24"
+         fill="currentColor">
+
+        <path d="M12 2L13.09 8.26L19 9.27L13.5 12.97L14.91 19L12 15.77L9.09 19L10.5 12.97L5 9.27L10.91 8.26L12 2Z"/>
+        <path d="M19 2L19.5 4.5L22 5L19.5 5.5L19 8L18.5 5.5L16 5L18.5 4.5L19 2Z"/>
+        <path d="M5 14L5.5 16.5L8 17L5.5 17.5L5 20L4.5 17.5L2 17L4.5 16.5L5 14Z"/>
+
+    </svg>
+</div>
 
     <!-- Texto -->
     <div class="max-w-2xl space-y-6">
@@ -79,7 +95,29 @@ body {
 
         <button onclick="javaApp.criarCampanha()"
                 class="button-glow bg-[#2c3338] border border-primary/40 text-primary px-10 py-5 rounded-lg flex items-center gap-4 uppercase font-bold tracking-widest">
-            ✨ Invocar Nova Campanha ✨
+            <svg xmlns="http://www.w3.org/2000/svg"
+     width="6"
+     height="6"
+     viewBox="0 0 24 24"
+     fill="currentColor">
+
+  <path d="M12 2L13.09 8.26L19 9.27L13.5 12.97L14.91 19L12 15.77L9.09 19L10.5 12.97L5 9.27L10.91 8.26L12 2Z"/>
+  <path d="M19 2L19.5 4.5L22 5L19.5 5.5L19 8L18.5 5.5L16 5L18.5 4.5L19 2Z"/>
+  <path d="M5 14L5.5 16.5L8 17L5.5 17.5L5 20L4.5 17.5L2 17L4.5 16.5L5 14Z"/>
+
+</svg> 
+Invocar Nova Campanha 
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="6"
+     height="6"
+     viewBox="0 0 24 24"
+     fill="currentColor">
+
+  <path d="M12 2L13.09 8.26L19 9.27L13.5 12.97L14.91 19L12 15.77L9.09 19L10.5 12.97L5 9.27L10.91 8.26L12 2Z"/>
+  <path d="M19 2L19.5 4.5L22 5L19.5 5.5L19 8L18.5 5.5L16 5L18.5 4.5L19 2Z"/>
+  <path d="M5 14L5.5 16.5L8 17L5.5 17.5L5 20L4.5 17.5L2 17L4.5 16.5L5 14Z"/>
+
+</svg>
             
         </button>
 

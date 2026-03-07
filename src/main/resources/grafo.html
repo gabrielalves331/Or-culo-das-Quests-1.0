@@ -35,6 +35,15 @@
 }
 #btnDFS:hover{ background:#285a3d; }
 
+#instrucao{
+    position:absolute;
+    top:70px;
+    left:20px;
+    color:#d4c5a9;
+    font-family:"Cinzel";
+    z-index:999;
+}
+
 body{
     margin:0;
     background:#0b0f14;
@@ -67,6 +76,11 @@ body{
 <button id="btnVoltar" onclick="javaApp.voltar()">← Voltar</button>
 <button id="btnDFS" onclick="executarDFS()">Executar DFS</button>
 
+<div id="instrucao">
+Clique esquerdo = início<br>
+Clique direito = destino
+</div>
+
 <div id="mynetwork"></div>
 
 <script>
@@ -74,7 +88,9 @@ body{
 let network;
 let nodes;
 let edges;
-let selectedNode = null;
+
+let inicio = null;
+let destino = null;
 
 function carregarGrafo(jsonString){
 
@@ -134,68 +150,93 @@ function carregarGrafo(jsonString){
 
     network = new vis.Network(container, data, options);
 
-    // 🔥 Captura nó selecionado
-    network.on("selectNode", function(params){
-        selectedNode = params.nodes[0];
-        console.log("Selecionado:", selectedNode);
+    // clique esquerdo = INICIO
+    network.on("click", function(params){
+
+        if(params.nodes.length > 0){
+
+            inicio = params.nodes[0];
+
+            nodes.update({
+                id: inicio,
+                color:{
+                    background:"#339af0",
+                    border:"#1c7ed6"
+                }
+            });
+
+            console.log("Inicio:", inicio);
+        }
+
     });
 
-    network.on("deselectNode", function(){
-        selectedNode = null;
+    // clique direito = DESTINO
+    network.on("oncontext", function(params){
+
+        params.event.preventDefault();
+
+        let nodeId = network.getNodeAt(params.pointer.DOM);
+
+        if(nodeId){
+
+            destino = nodeId;
+
+            nodes.update({
+                id: destino,
+                color:{
+                    background:"#ff6b6b",
+                    border:"#c92a2a"
+                }
+            });
+
+            console.log("Destino:", destino);
+        }
+
     });
+
 }
 
 async function executarDFS(){
 
-    const DELAY = 1500;
-
-    if(!selectedNode){
-        alert("Selecione um nó primeiro.");
+    if(!inicio || !destino){
+        alert("Selecione um nó inicial e um destino.");
         return;
     }
 
-    // Pausa física se quiser manter estabilidade
+    // evita lag
     network.stopSimulation();
 
-    // Resetar cores
-    nodes.forEach(n => {
+    let resposta = javaApp.executarDFS(inicio, destino);
+    let caminho = JSON.parse(resposta);
+
+    if(caminho.length === 0){
+        alert("Nenhum caminho encontrado.");
+        return;
+    }
+
+    for(let id of caminho){
+
+        // destaca nó
         nodes.update({
-            id: n.id,
-            color: null
-        });
-    });
-
-    let visitados = JSON.parse(javaApp.executarDFS(selectedNode));
-
-    for(let i = 0; i < visitados.length; i++){
-
-        let id = visitados[i];
-
-        // 🟡 Marca como nó atual
-        nodes.update({
-            id: id,
-            color:{
-                background:"#ffd43b",
-                border:"#f59f00"
-            }
-        });
-
-        await new Promise(resolve =>
-            setTimeout(resolve, DELAY)
-        );
-
-        // 🟢 Marca como visitado definitivo
-        nodes.update({
-            id: id,
+            id:id,
             color:{
                 background:"#00ff88",
                 border:"#00cc66"
             }
         });
+
+        // animação de zoom
+        network.focus(id, {
+            scale:1.6,
+            animation:{
+                duration:1400,
+                easingFunction:"easeInOutQuad"
+            }
+        });
+
+        await new Promise(r => setTimeout(r, 900));
     }
 
-    // Religa física depois de tudo
-    network.startSimulation();
 }
 
 </script>

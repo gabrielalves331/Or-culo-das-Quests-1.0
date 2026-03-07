@@ -50,15 +50,10 @@ public class HubWeb extends BaseWebFrame {
 }
 
     
-     public void voltarPaginaInicialWeb() {
-        new PaginaInicialWeb();
-        dispose();
-    }
-      public void logout() {
-        Sessao.encerrar();
-        new LoginWeb();
-        dispose();
-    }
+     public void voltarcampanha(){
+         new CampanhasWeb();
+         dispose();
+     }
       
     
 

@@ -181,10 +181,22 @@ tailwind.config = {
     <span>Mural Conectado ao Reino</span>
   </div>
 
-  <button class="px-6 py-2 border border-primary/30 rounded hover:bg-primary/10 transition-colors"
-          onclick="javaApp.logout()">
-      Logout
-  </button>
+  <button onclick="chamarJava('voltarcampanha')"
+class="flex items-center gap-3 px-6 py-3 border border-primary/30 rounded hover:bg-primary/10 transition-all">
+
+<svg xmlns="http://www.w3.org/2000/svg"
+class="w-5 h-5 text-primary"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor"
+stroke-width="1.8">
+<path stroke-linecap="round" stroke-linejoin="round"
+d="M15 19l-7-7 7-7"/>
+</svg>
+
+<span class="uppercase tracking-widest">Voltar às Campanhas</span>
+
+</button>
 
 </footer>
 

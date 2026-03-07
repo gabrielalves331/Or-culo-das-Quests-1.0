@@ -62,7 +62,7 @@ public class GrafoWeb extends JFrame {
         setVisible(true);
     }
 
-   public String executarDFS(String inicio) {
+   public String executarDFS(String inicio, String destino) {
 
     Map<String, List<String>> adjacencia = new HashMap<>();
 
@@ -105,9 +105,9 @@ public class GrafoWeb extends JFrame {
 
     DFSService dfs = new DFSService(adjacencia);
 
-    List<String> visitados = dfs.executarDFS(inicio);
+List<String> caminho = dfs.executarDFS(inicio, destino);
 
-    return new com.google.gson.Gson().toJson(visitados);
+return new com.google.gson.Gson().toJson(caminho);
     
 }
 
